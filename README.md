@@ -1,71 +1,48 @@
 # Archive
 
-Minimal collection and archive system built with Astro and Chiri theme.
+Minimal collection and archive system built with Astro and Chiri.
 
-## Features
-
-- Collections system for organizing content
-- Sidebar navigation (desktop) and mobile menu
-- MDX support with interactive components
-- Dark/light theme toggle
-- Performance optimized
-
-## Quick Start
+## Setup
 
 ```bash
 pnpm install
 pnpm dev
 ```
 
-Visit `http://localhost:4321`
-
 ## Structure
 
 ```
-src/
-├── content/
-│   ├── posts/       # Guide posts
-│   ├── astronomy/   # Collections
-│   ├── geography/
-│   ├── literature/
-│   └── movie/
-├── pages/           # Routes
-└── config.ts        # Configuration
+src/content/
+├── posts/       # Guide
+├── astronomy/   # Collections
+├── geography/
+├── literature/
+└── movie/
 ```
 
-## Add Content
+## Add Post
 
-Create `.md` or `.mdx` file in collection folder:
+Create `.md` file in collection folder:
 
 ```markdown
 ---
-title: 'Post Title'
+title: 'Title'
 pubDate: 2024-10-31
 ---
 
-Content here...
+Content...
 ```
-
-## Configuration
-
-Edit `src/config.ts` for site settings.
 
 ## Build
 
 ```bash
 pnpm build
-pnpm preview
 ```
 
-## Documentation
+## Docs
 
-Visit `/guide/` for:
-- How to add posts
-- How to add collections
-- Markdown vs MDX guide
-- Using MDX components
-- Customization tips
+Visit `/guide/` in the app for full documentation.
 
 ---
 
-Built with [Astro](https://astro.build) and [Chiri](https://github.com/the3ash/astro-chiri)
+Based on [Chiri](https://github.com/the3ash/astro-chiri)
