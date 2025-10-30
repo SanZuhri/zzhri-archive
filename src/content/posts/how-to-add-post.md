@@ -1,0 +1,161 @@
+---
+title: 'How to Add a Post'
+pubDate: 2024-10-29
+---
+
+Adding a post to your Archive is simple. This guide covers everything you need to know.
+
+## Quick Start
+
+To add a post to a collection:
+
+1. Create a `.md` or `.mdx` file in the collection folder
+2. Add required frontmatter
+3. Write your content
+4. Save and build
+
+## Detailed Steps
+
+### Step 1: Choose Your Collection
+
+Decide which collection your post belongs to:
+- `src/content/astronomy/` - For astronomy posts
+- `src/content/geography/` - For geography posts
+- `src/content/literature/` - For literature posts
+- Or any custom collection you've created
+
+### Step 2: Create the File
+
+Create a new markdown file with a descriptive name:
+
+```bash
+src/content/astronomy/mars-exploration.md
+```
+
+**Naming Tips:**
+- Use lowercase letters
+- Use hyphens instead of spaces
+- Be descriptive but concise
+- Avoid special characters
+
+### Step 3: Add Frontmatter
+
+Every post needs frontmatter at the top:
+
+```markdown
+---
+title: 'Mars Exploration: Past and Future'
+pubDate: 2024-10-29
+image: '/images/mars.jpg'  # Optional
+---
+```
+
+**Required Fields:**
+- `title` - The post title (string)
+- `pubDate` - Publication date (YYYY-MM-DD format)
+
+**Optional Fields:**
+- `image` - Featured image path
+
+### Step 4: Write Your Content
+
+After the frontmatter, write your content using Markdown:
+
+```markdown
+---
+title: 'Mars Exploration'
+pubDate: 2024-10-29
+---
+
+Mars has fascinated humanity for centuries...
+
+## Early Observations
+
+The first telescopic observations...
+
+## Modern Missions
+
+Recent missions like Perseverance...
+```
+
+### Step 5: Preview and Build
+
+Run the development server to preview:
+
+```bash
+npm run dev
+```
+
+Then build for production:
+
+```bash
+npm run build
+```
+
+## Markdown Features
+
+Archive supports standard Markdown plus:
+
+### Headings
+```markdown
+# H1 Heading
+## H2 Heading
+### H3 Heading
+```
+
+### Lists
+```markdown
+- Unordered item
+- Another item
+
+1. Ordered item
+2. Another item
+```
+
+### Links
+```markdown
+[Link text](https://example.com)
+```
+
+### Images
+```markdown
+![Alt text](/path/to/image.jpg)
+```
+
+### Code Blocks
+````markdown
+```javascript
+const hello = "world"
+```
+````
+
+### Blockquotes
+```markdown
+> This is a quote
+```
+
+## Draft Posts
+
+To create a draft post that won't be published, prefix the filename with an underscore:
+
+```bash
+src/content/astronomy/_draft-post.md
+```
+
+Draft posts are automatically excluded from the site.
+
+## Tips for Great Posts
+
+1. **Use descriptive titles** - Make it clear what the post is about
+2. **Add headings** - Break up content with H2 and H3 headings
+3. **Include images** - Visual content enhances readability
+4. **Keep it focused** - One topic per post
+5. **Proofread** - Check for typos and formatting issues
+
+## Next Steps
+
+Now that you know how to add posts, explore:
+- [How to Add a New Collection](/how-to-add-collection/) - Create custom collections
+- [Customizing Your Archive](/customizing-archive/) - Personalize your archive
+
+Happy writing!

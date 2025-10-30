@@ -1,31 +1,481 @@
 ---
-title: 'Using MDX'
-pubDate: '2025-05-12'
+title: 'Using MDX: A Practical Guide'
+pubDate: '2024-10-26'
 ---
 
-import Callout from '@/components/examples/Callout.astro'
-import CounterButton from '@/components/examples/CounterButton.astro'
 import Tag from '@/components/examples/Tag.astro'
+import Alert from '@/components/examples/Alert.astro'
+import Card from '@/components/examples/Card.astro'
+import Tabs from '@/components/examples/Tabs.astro'
+import Accordion from '@/components/examples/Accordion.astro'
+import CounterButton from '@/components/examples/CounterButton.astro'
 
-MDX combines Markdown with embedded JavaScript and JSX, making it easy to build interactive content. Below are some examples.
+export const tabsData = [
+  { label: 'JavaScript', content: 'JavaScript is a versatile programming language used for web development.' },
+  { label: 'TypeScript', content: 'TypeScript is a typed superset of JavaScript that compiles to plain JavaScript.' },
+  { label: 'Python', content: 'Python is a high-level programming language known for its simplicity and readability.' }
+]
+
+export const accordionData = [
+  { title: 'What is MDX?', content: 'MDX is a format that lets you write JSX in your Markdown documents.' },
+  { title: 'Why use MDX?', content: 'MDX allows you to create interactive and dynamic content with components.' },
+  { title: 'How to get started?', content: 'Start by creating a .mdx file and importing components you want to use.' }
+]
+
+MDX combines Markdown with embedded JavaScript and JSX, making it easy to build interactive content. This guide shows you how to use MDX effectively in Archive.
+
+## What Makes MDX Special?
+
+MDX allows you to:
+- **Import and use components** directly in your content
+- **Write JSX** alongside Markdown
+- **Use JavaScript expressions** for dynamic content
+- **Create interactive experiences** without leaving your document
+
+## Basic MDX Syntax
+
+### Importing Components
+
+At the top of your MDX file, you can import components:
+
+```jsx
+import MyComponent from '../components/MyComponent.astro'
+import { Button } from '../components/Button.jsx'
+```
+
+### Using Components
+
+Once imported, use them like regular JSX:
+
+```jsx
+<MyComponent title="Hello" />
+
+<Button onClick={() => alert('Clicked!')}>
+  Click me
+</Button>
+```
+
+### JavaScript Expressions
+
+Embed JavaScript directly in your content:
+
+```jsx
+The current year is {new Date().getFullYear()}
+
+{/* Conditional rendering */}
+{isLoggedIn ? <WelcomeMessage /> : <LoginPrompt />}
+
+{/* Array mapping */}
+{items.map(item => <Tag key={item.id} label={item.name} />)}
+```
+
+## Interactive Examples
+
+Below are 6 practical examples of MDX components in action.
 
 ---
 
-## Callout
+## Example 1: Tag Component
 
-<Callout />
-
-## Button
-
-<CounterButton />
-
-## Tag
+Simple, reusable tag component:
 
 <Tag />
 
+**How it works:**
+- Lightweight component for labels
+- Can accept props for customization
+- Maintains consistent styling
+- Perfect for categories, keywords, or labels
+
+**Usage in MDX:**
+```jsx
+<Tag />
+```
+
 ---
 
-## Ref
+## Example 2: Alert Component
 
+Alert components for different message types:
+
+<Alert type="info" title="Information">
+  This is an informational message. Use it to provide helpful context.
+</Alert>
+
+<Alert type="success" title="Success">
+  Operation completed successfully! Your changes have been saved.
+</Alert>
+
+<Alert type="warning" title="Warning">
+  Please review this carefully before proceeding.
+</Alert>
+
+<Alert type="error" title="Error">
+  Something went wrong. Please try again later.
+</Alert>
+
+**How it works:**
+- Supports 4 types: info, success, warning, error
+- Optional title prop
+- Content passed as children
+- Automatically styled with icons
+
+**Usage in MDX:**
+```jsx
+<Alert type="success" title="Success">
+  Your message here
+</Alert>
+```
+
+---
+
+## Example 3: Interactive Button
+
+A counter button with client-side state:
+
+<CounterButton />
+
+**How it works:**
+- Interactive component with JavaScript
+- Maintains state across clicks
+- Demonstrates client-side interactivity
+- Shows how to add dynamic behavior
+
+**Usage in MDX:**
+```jsx
+<CounterButton />
+```
+
+---
+
+## Example 4: Card Component
+
+Structured content cards:
+
+<Card 
+  title="Featured Article" 
+  subtitle="Published on October 26, 2024"
+  footer="Read time: 5 minutes"
+>
+  Cards are perfect for organizing content into distinct sections. They can include headers, body content, and footers for additional information.
+</Card>
+
+<Card title="Simple Card">
+  You can also use cards without subtitles or footers for a cleaner look.
+</Card>
+
+**How it works:**
+- Optional title, subtitle, and footer
+- Content passed as children
+- Consistent styling
+- Great for features, articles, or products
+
+**Usage in MDX:**
+```jsx
+<Card 
+  title="Card Title" 
+  subtitle="Subtitle text"
+  footer="Footer text"
+>
+  Your content here
+</Card>
+```
+
+---
+
+## Example 5: Tabs Component (Interactive)
+
+Tabbed content with client-side interactivity:
+
+<Tabs tabs={tabsData} />
+
+**How it works:**
+- Client-side state management
+- Click to switch between tabs
+- Smooth transitions
+- Perfect for code examples or multi-view content
+
+**Usage in MDX:**
+```jsx
+export const tabsData = [
+  { label: 'Tab 1', content: 'Content 1' },
+  { label: 'Tab 2', content: 'Content 2' }
+]
+
+<Tabs tabs={tabsData} />
+```
+
+---
+
+## Example 6: Accordion Component (Interactive)
+
+Collapsible content sections:
+
+<Accordion items={accordionData} />
+
+**How it works:**
+- Click to expand/collapse sections
+- Only one section open at a time
+- Client-side interactivity
+- Great for FAQs or long content
+
+**Usage in MDX:**
+```jsx
+export const accordionData = [
+  { title: 'Question 1', content: 'Answer 1' },
+  { title: 'Question 2', content: 'Answer 2' }
+]
+
+<Accordion items={accordionData} />
+```
+
+---
+
+---
+
+## Advanced MDX Techniques
+
+### 1. Passing Props to Components
+
+Components can accept props for customization:
+
+```jsx
+<Callout type="warning" title="Important">
+  This is a warning message
+</Callout>
+
+<Button variant="primary" size="large">
+  Large Primary Button
+</Button>
+```
+
+### 2. Nesting Components
+
+You can nest components inside each other:
+
+```jsx
+<Card>
+  <CardHeader>
+    <Title>My Card</Title>
+  </CardHeader>
+  <CardBody>
+    <p>Card content goes here</p>
+    <Button>Action</Button>
+  </CardBody>
+</Card>
+```
+
+### 3. Using Children
+
+Pass content as children to components:
+
+```jsx
+<Alert>
+  This is the **alert content** with Markdown formatting!
+</Alert>
+```
+
+### 4. Conditional Rendering
+
+Show/hide content based on conditions:
+
+```jsx
+{showDetails && (
+  <DetailPanel>
+    <p>Additional details here</p>
+  </DetailPanel>
+)}
+
+{status === 'success' ? (
+  <SuccessMessage />
+) : (
+  <ErrorMessage />
+)}
+```
+
+### 5. Mapping Arrays
+
+Generate multiple components from data:
+
+```jsx
+{tags.map(tag => (
+  <Tag key={tag.id} label={tag.name} color={tag.color} />
+))}
+```
+
+### 6. Importing Data
+
+Import and use data in your content:
+
+```jsx
+import { stats } from '../data/statistics.js'
+
+Our platform has {stats.users.toLocaleString()} users!
+```
+
+## MDX Best Practices
+
+### 1. Keep Imports Organized
+
+Group imports at the top:
+
+```jsx
+// Components
+import Header from '../components/Header.astro'
+import Footer from '../components/Footer.astro'
+
+// Data
+import { data } from '../data/content.js'
+
+// Utilities
+import { formatDate } from '../utils/date.js'
+```
+
+### 2. Use Semantic Component Names
+
+Choose clear, descriptive names:
+
+```jsx
+// Good
+<WarningBox>Important!</WarningBox>
+<PricingTable data={prices} />
+
+// Avoid
+<Box1>Important!</Box1>
+<Table data={prices} />
+```
+
+### 3. Balance Markdown and JSX
+
+Don't overuse components. Use Markdown for simple content:
+
+```jsx
+// Good - Mix of both
+# My Article
+
+This is regular Markdown text.
+
+<InteractiveDemo />
+
+More Markdown content here.
+
+// Avoid - Too much JSX
+<Heading level={1}>My Article</Heading>
+
+<Paragraph>This is regular text.</Paragraph>
+
+<InteractiveDemo />
+
+<Paragraph>More content here.</Paragraph>
+```
+
+### 4. Comment Your Code
+
+Use JSX comments for clarity:
+
+```jsx
+{/* This component shows the pricing table */}
+<PricingTable />
+
+{/* TODO: Add more examples here */}
+```
+
+### 5. Handle Errors Gracefully
+
+Provide fallbacks for components:
+
+```jsx
+{data ? (
+  <DataTable data={data} />
+) : (
+  <p>Loading data...</p>
+)}
+```
+
+## When to Use MDX
+
+Use MDX when you need:
+
+✅ **Interactive components** - Buttons, forms, demos
+✅ **Data visualization** - Charts, graphs, tables
+✅ **Reusable UI elements** - Cards, alerts, callouts
+✅ **Dynamic content** - Content that changes based on data
+✅ **Complex layouts** - Multi-column, grids, tabs
+✅ **Client-side interactivity** - State management, user input
+
+Stick with Markdown when:
+
+✅ **Simple text content** - Blog posts, articles
+✅ **Static documentation** - Guides, references
+✅ **Performance is critical** - Faster build times
+✅ **Simplicity is preferred** - Easier to maintain
+
+## Troubleshooting MDX
+
+### Issue: Component Not Rendering
+
+**Problem:** Component shows as text instead of rendering
+
+**Solution:** Check your import path and component name:
+```jsx
+// Wrong
+import myComponent from './MyComponent.astro'
+
+// Correct
+import MyComponent from './MyComponent.astro'
+```
+
+### Issue: Syntax Error
+
+**Problem:** MDX fails to compile
+
+**Solution:** Ensure JSX syntax is correct:
+```jsx
+// Wrong - HTML syntax
+<div class="box">
+
+// Correct - JSX syntax
+<div className="box">
+```
+
+### Issue: Props Not Working
+
+**Problem:** Props aren't being passed to component
+
+**Solution:** Check prop names and types:
+```jsx
+// Make sure prop names match component definition
+<Button variant="primary" size="large" />
+```
+
+### Issue: Styling Not Applied
+
+**Problem:** Component styles don't show
+
+**Solution:** Ensure styles are imported or scoped correctly in the component file.
+
+## Performance Tips
+
+1. **Lazy load heavy components** - Use dynamic imports for large components
+2. **Minimize client-side JS** - Use Astro components when possible
+3. **Optimize images** - Use Astro's image optimization
+4. **Cache component imports** - Reuse imported components
+5. **Profile build times** - Monitor MDX compilation time
+
+## Conclusion
+
+MDX is a powerful tool that bridges the gap between content and code. It allows you to create rich, interactive experiences while maintaining the simplicity of Markdown for your prose.
+
+**Key Takeaways:**
+- Use MDX for interactive and dynamic content
+- Keep it simple - don't overuse components
+- Follow JSX syntax rules
+- Create reusable components for common patterns
+- Balance performance with functionality
+
+For more information, see:
+- [Markdown vs MDX Guide](/markdown-vs-mdx/) - Detailed comparison
 - [MDX Syntax Documentation](https://mdxjs.com/docs/what-is-mdx)
-- [Astro Usage Documentation](https://docs.astro.build/en/guides/markdown-content/#markdown-and-mdx-pages)
+- [Astro MDX Documentation](https://docs.astro.build/en/guides/markdown-content/#markdown-and-mdx-pages)
+
+Happy coding with MD

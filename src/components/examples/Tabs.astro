@@ -1,0 +1,108 @@
+---
+interface Props {
+  tabs: Array<{ label: string; content: string }>
+}
+
+const { tabs } = Astro.props
+---
+
+<div class="tabs-container">
+  <div class="tabs-header">
+    {
+      tabs.map((tab, index) => (
+        <button class={`tab-button ${index === 0 ? 'active' : ''}`} data-index={index}>
+          {tab.label}
+        </button>
+      ))
+    }
+  </div>
+  <div class="tabs-content-wrapper">
+    {
+      tabs.map((tab, index) => (
+        <div class={`tabs-content ${index === 0 ? 'active' : ''}`} data-content={index}>
+          {tab.content}
+        </div>
+      ))
+    }
+  </div>
+</div>
+
+<script>
+  document.addEventListener('astro:page-load', () => {
+    const containers = document.querySelectorAll('.tabs-container')
+
+    containers.forEach((container) => {
+      const buttons = container.querySelectorAll('.tab-button')
+      const contents = container.querySelectorAll('.tabs-content')
+
+      buttons.forEach((button) => {
+        button.addEventListener('click', () => {
+          const index = parseInt((button as HTMLElement).dataset.index || '0')
+
+          // Remove active class from all buttons and contents
+          buttons.forEach((btn) => btn.classList.remove('active'))
+          contents.forEach((content) => content.classList.remove('active'))
+
+          // Add active class to clicked button and corresponding content
+          button.classList.add('active')
+          contents[index]?.classList.add('active')
+        })
+      })
+    })
+  })
+</script>
+
+<style>
+  .tabs-container {
+    margin: 1rem 0;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    overflow: hidden;
+    font-family: var(--sans);
+  }
+
+  .tabs-header {
+    display: flex;
+    border-bottom: 1px solid var(--border);
+    background-color: var(--bg-secondary);
+  }
+
+  .tab-button {
+    flex: 1;
+    padding: 0.75rem 1rem;
+    border: none;
+    background: transparent;
+    color: var(--text-secondary);
+    font-size: 0.875rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border-bottom: 2px solid transparent;
+  }
+
+  .tab-button:hover {
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+  }
+
+  .tab-button.active {
+    color: var(--text-primary);
+    border-bottom-color: var(--text-primary);
+    background-color: var(--bg-primary);
+  }
+
+  .tabs-content-wrapper {
+    position: relative;
+  }
+
+  .tabs-content {
+    display: none;
+    padding: 1rem;
+    color: var(--text-secondary);
+    line-height: 1.6;
+  }
+
+  .tabs-content.active {
+    display: block;
+  }
+</style>

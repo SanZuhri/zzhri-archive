@@ -2,15 +2,25 @@
 title: 'About'
 ---
 
-<!--
-This content will be displayed at the top of the index page.
-You can leave this empty if you don’t want to show any content.
--->
+**Archive** is a minimal collection and archive system built with [Astro](https://astro.build) and the [Chiri theme](https://github.com/the3ash/astro-chiri).
 
-A static blog theme based on [Astro](https://astro.build), designed for clarity and focus.
+This system helps you organize content into themed collections with a clean, distraction-free interface. Perfect for building knowledge bases, documentation sites, or personal archives.
 
-With a deliberately minimal design, this layout ensures your content takes center stage. It's built for flexibility, offering customization options that honor its clean and elegant aesthetic.
+## Getting Started
 
-Effortlessly share your thoughts in _a calm & dustless space._
+New to Archive? Start with these essential guides:
 
-Check posts for details and view source on [GitHub](https://github.com/the3ash/astro-chiri).
+- **[Welcome to Archive](/welcome/)** - Learn what Archive is and its key features
+- **[How to Add a Post](/how-to-add-post/)** - Create and publish posts in collections
+- **[How to Add a New Collection](/how-to-add-collection/)** - Set up custom collections
+- **[Customizing Your Archive](/customizing-archive/)** - Personalize your archive
+
+## Features
+
+- **Collections System** - Organize posts into themed collections
+- **Minimal Design** - Clean, typography-first interface based on Chiri
+- **Sidebar Navigation** - Quick access to Home, Collections, and Guide
+- **Responsive Layout** - Works beautifully on all screen sizes
+- **Markdown Support** - Write content in Markdown with full formatting support
+
+Browse [Collections](/collections/) to see organized content, or continue reading the guides below to learn more.

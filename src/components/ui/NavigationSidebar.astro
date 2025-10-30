@@ -3,6 +3,7 @@ import { themeConfig } from '@/config'
 
 const currentPath = Astro.url.pathname
 const isCollectionsPage = currentPath.startsWith('/collections')
+const isGuidePage = currentPath.startsWith('/guide')
 ---
 
 <div class="nav-sidebar-container" id="nav-sidebar">
@@ -21,6 +22,16 @@ const isCollectionsPage = currentPath.startsWith('/collections')
           data-text="Collections"
         >
           Collections
+        </a>
+      </li>
+
+      <li class="nav-item">
+        <a
+          href="/guide/"
+          class={`nav-link ${isGuidePage ? 'active' : ''}`}
+          data-text="Guide"
+        >
+          Guide
         </a>
       </li>
     </ul>

@@ -1,0 +1,118 @@
+---
+interface Props {
+  items: Array<{ title: string; content: string }>
+}
+
+const { items } = Astro.props
+---
+
+<div class="accordion">
+  {
+    items.map((item, index) => (
+      <div class="accordion-item">
+        <button class="accordion-header" data-index={index}>
+          <span>{item.title}</span>
+          <span class="accordion-icon">+</span>
+        </button>
+        <div class="accordion-content" data-content={index}>
+          {item.content}
+        </div>
+      </div>
+    ))
+  }
+</div>
+
+<script>
+  document.addEventListener('astro:page-load', () => {
+    const accordions = document.querySelectorAll('.accordion')
+
+    accordions.forEach((accordion) => {
+      const headers = accordion.querySelectorAll('.accordion-header')
+
+      headers.forEach((header) => {
+        header.addEventListener('click', () => {
+          const index = (header as HTMLElement).dataset.index
+          const content = accordion.querySelector(`[data-content="${index}"]`)
+          const icon = header.querySelector('.accordion-icon')
+          const isOpen = content?.classList.contains('active')
+
+          // Close all items in this accordion
+          accordion
+            .querySelectorAll('.accordion-content')
+            .forEach((c) => c.classList.remove('active'))
+          accordion
+            .querySelectorAll('.accordion-header')
+            .forEach((h) => h.classList.remove('active'))
+          accordion.querySelectorAll('.accordion-icon').forEach((i) => (i.textContent = '+'))
+
+          // Open clicked item if it was closed
+          if (!isOpen) {
+            content?.classList.add('active')
+            header.classList.add('active')
+            if (icon) icon.textContent = '−'
+          }
+        })
+      })
+    })
+  })
+</script>
+
+<style>
+  .accordion {
+    margin: 1rem 0;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    overflow: hidden;
+    font-family: var(--sans);
+  }
+
+  .accordion-item {
+    border-bottom: 1px solid var(--border);
+  }
+
+  .accordion-item:last-child {
+    border-bottom: none;
+  }
+
+  .accordion-header {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    border: none;
+    background: transparent;
+    color: var(--text-primary);
+    font-size: 0.875rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    text-align: left;
+  }
+
+  .accordion-header:hover {
+    background-color: var(--bg-secondary);
+  }
+
+  .accordion-header.active {
+    background-color: var(--bg-secondary);
+  }
+
+  .accordion-icon {
+    font-size: 1.25rem;
+    font-weight: 300;
+    color: var(--text-secondary);
+  }
+
+  .accordion-content {
+    display: none;
+    padding: 0 1rem 1rem 1rem;
+    color: var(--text-secondary);
+    line-height: 1.6;
+    font-size: 0.875rem;
+  }
+
+  .accordion-content.active {
+    display: block;
+  }
+</style>

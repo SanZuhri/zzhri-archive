@@ -1,16 +1,143 @@
 ---
 import IndexLayout from '@/layouts/IndexLayout.astro'
-import About from '@/components/widgets/About.astro'
-import PostList from '@/components/widgets/PostList.astro'
 import { themeConfig } from '@/config'
-import { getSortedFilteredPosts } from '@/utils/draft'
-
-const posts = await getSortedFilteredPosts()
 ---
 
 <IndexLayout title={themeConfig.site.title} description={themeConfig.site.description}>
-  <About />
   <main>
-    <PostList posts={posts} />
+    <div class="intro">
+      <h1>Welcome to {themeConfig.site.title}</h1>
+      
+      <div class="about-section">
+        <p class="description">
+          <strong>Archive</strong> is a minimal collection and archive system built with Astro and the Chiri theme. 
+          It helps you organize your content into themed collections with a clean, distraction-free interface.
+        </p>
+        
+        <p class="description">
+          Whether you're building a knowledge base, documentation site, or personal archive, 
+          this system provides an elegant way to organize and browse your content.
+        </p>
+      </div>
+
+      <div class="highlight-box">
+        <p class="highlight-title">📚 New here?</p>
+        <p class="highlight-text">
+          Start by reading the <a href="/guide/" class="inline-link">Guide posts</a> to learn how to use Archive, 
+          add collections, and create posts. The guides will help you get the most out of your archive.
+        </p>
+      </div>
+      
+      <div class="links">
+        <a href="/collections/" class="link-item">
+          <span class="link-title">Collections</span>
+          <span class="link-desc">Browse organized collections of posts</span>
+        </a>
+        
+        <a href="/guide/" class="link-item">
+          <span class="link-title">Guide</span>
+          <span class="link-desc">Learn how to use and customize Archive</span>
+        </a>
+      </div>
+    </div>
   </main>
 </IndexLayout>
+
+<style>
+  .intro {
+    max-width: 100%;
+  }
+
+  h1 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin: 0 0 1.5rem 0;
+    color: var(--text-primary);
+  }
+
+  .about-section {
+    margin-bottom: 2rem;
+  }
+
+  .description {
+    margin: 0 0 1rem 0;
+    color: var(--text-secondary);
+    opacity: 0.85;
+    line-height: 1.6;
+  }
+
+  .description:last-child {
+    margin-bottom: 0;
+  }
+
+  .highlight-box {
+    padding: 1rem;
+    margin-bottom: 2rem;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    background-color: var(--bg-secondary);
+  }
+
+  .highlight-title {
+    margin: 0 0 0.5rem 0;
+    font-weight: 600;
+    color: var(--text-primary);
+  }
+
+  .highlight-text {
+    margin: 0;
+    color: var(--text-secondary);
+    opacity: 0.85;
+    line-height: 1.6;
+  }
+
+  .inline-link {
+    color: var(--text-primary);
+    text-decoration: underline;
+    text-decoration-color: var(--text-tertiary);
+    text-underline-offset: 2px;
+    transition: text-decoration-color 0.15s ease-out;
+  }
+
+  .inline-link:hover {
+    text-decoration-color: var(--text-primary);
+  }
+
+  .links {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .link-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    padding: 0.75rem 0;
+    border-bottom: 1px solid var(--border);
+    text-decoration: none;
+    transition: opacity 0.15s ease-out;
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .links:hover .link-item {
+      opacity: 0.4;
+    }
+
+    .links:hover .link-item:hover {
+      opacity: 1;
+    }
+  }
+
+  .link-title {
+    font-size: 1rem;
+    font-weight: 500;
+    color: var(--text-primary);
+  }
+
+  .link-desc {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    opacity: 0.75;
+  }
+</style>
