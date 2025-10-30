@@ -3,16 +3,41 @@ title: 'How to Add a Post'
 pubDate: 2024-10-29
 ---
 
+import FlowDiagram from '@/components/examples/FlowDiagram.astro'
+
+export const postSteps = [
+  {
+    number: 1,
+    title: 'Choose Collection',
+    description: 'Decide which collection your post belongs to (astronomy, geography, literature, or posts for guides)'
+  },
+  {
+    number: 2,
+    title: 'Create File',
+    description: 'Create a .md or .mdx file in the collection folder with a descriptive name'
+  },
+  {
+    number: 3,
+    title: 'Add Frontmatter',
+    description: 'Add required metadata: title and pubDate at the top of the file'
+  },
+  {
+    number: 4,
+    title: 'Write Content',
+    description: 'Write your content using Markdown or MDX syntax'
+  },
+  {
+    number: 5,
+    title: 'Build & Deploy',
+    description: 'Run npm run build to generate your site with the new post'
+  }
+]
+
 Adding a post to your Archive is simple. This guide covers everything you need to know.
 
-## Quick Start
+## Quick Start Flow
 
-To add a post to a collection:
-
-1. Create a `.md` or `.mdx` file in the collection folder
-2. Add required frontmatter
-3. Write your content
-4. Save and build
+<FlowDiagram steps={postSteps} title="Post Creation Workflow" />
 
 ## Detailed Steps
 
@@ -22,6 +47,7 @@ Decide which collection your post belongs to:
 - `src/content/astronomy/` - For astronomy posts
 - `src/content/geography/` - For geography posts
 - `src/content/literature/` - For literature posts
+- `src/content/posts/` - For guide posts
 - Or any custom collection you've created
 
 ### Step 2: Create the File

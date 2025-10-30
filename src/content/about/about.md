@@ -11,8 +11,10 @@ This system helps you organize content into themed collections with a clean, dis
 New to Archive? Start with these essential guides:
 
 - **[Welcome to Archive](/welcome/)** - Learn what Archive is and its key features
-- **[How to Add a Post](/how-to-add-post/)** - Create and publish posts in collections
-- **[How to Add a New Collection](/how-to-add-collection/)** - Set up custom collections
+- **[How to Add a Post](/how-to-add-post/)** - Step-by-step guide with workflow diagram
+- **[How to Add a New Collection](/how-to-add-collection/)** - Create custom collections with visual flow
+- **[Markdown vs MDX](/markdown-vs-mdx/)** - Understand the differences and when to use each
+- **[Using MDX](/using-mdx/)** - Interactive examples and practical guide
 - **[Customizing Your Archive](/customizing-archive/)** - Personalize your archive
 
 ## Features

@@ -30,6 +30,11 @@ const literature = defineCollection({
   schema: () => postSchema
 })
 
+const movie = defineCollection({
+  loader: glob({ base: './src/content/movie', pattern: '**/*.{md,mdx}' }),
+  schema: () => postSchema
+})
+
 const about = defineCollection({
   // Load Markdown files in the `src/content/about/` directory.
   loader: glob({ base: './src/content/about', pattern: '**/*.md' }),
@@ -37,4 +42,4 @@ const about = defineCollection({
   schema: z.object({})
 })
 
-export const collections = { posts, astronomy, geography, literature, about }
+export const collections = { posts, astronomy, geography, literature, movie, about }

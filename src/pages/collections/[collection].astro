@@ -5,7 +5,7 @@ import { themeConfig } from '@/config'
 import { getCollection } from 'astro:content'
 
 export async function getStaticPaths() {
-  const collections = ['astronomy', 'geography', 'literature']
+  const collections = ['astronomy', 'geography', 'literature', 'movie']
   
   return collections.map((collection) => ({
     params: { collection },
@@ -28,11 +28,15 @@ const collectionMeta: Record<string, { title: string; description: string }> = {
   literature: {
     title: 'Literature',
     description: 'Posts about literature and books'
+  },
+  movie: {
+    title: 'Movie',
+    description: 'Posts about movie and cinema'
   }
 }
 
 const meta = collectionMeta[collection]
-const posts = await getCollection(collection as 'astronomy' | 'geography' | 'literature')
+const posts = await getCollection(collection as 'astronomy' | 'geography' | 'literature' | 'movie')
 const filteredPosts = posts
   .filter((post: any) => !post.id.startsWith('_'))
   .sort((a: any, b: any) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())

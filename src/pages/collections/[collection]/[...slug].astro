@@ -4,28 +4,32 @@ import PostLayout from '@/layouts/PostLayout.astro'
 import { render } from 'astro:content'
 
 export async function getStaticPaths() {
-  const collections = ['astronomy', 'geography', 'literature'] as const
-  
+  const collections = ['astronomy', 'geography', 'literature', 'movie'] as const
+
   const paths = await Promise.all(
     collections.map(async (collectionName) => {
       const posts = await getCollection(collectionName)
       return posts
         .filter((post: any) => !post.id.startsWith('_'))
         .map((post: any) => ({
-          params: { 
+          params: {
             collection: collectionName,
-            slug: post.id 
+            slug: post.id
           },
           props: { post, collection: collectionName }
         }))
     })
   )
-  
+
   return paths.flat()
 }
 
 type Props = {
-  post: CollectionEntry<'astronomy'> | CollectionEntry<'geography'> | CollectionEntry<'literature'>
+  post:
+    | CollectionEntry<'astronomy'>
+    | CollectionEntry<'geography'>
+    | CollectionEntry<'literature'>
+    | CollectionEntry<'movie'>
   collection: string
 }
 
@@ -34,8 +38,18 @@ const { Content, remarkPluginFrontmatter } = await render(post)
 
 const readingTime = remarkPluginFrontmatter.readingTime
 const toc = remarkPluginFrontmatter.toc || []
+
+// Collection posts go back to their collection page
+const backUrl = `/collections/${collection}/`
+const backLabel = collection
 ---
 
-<PostLayout {...post.data} readingTime={readingTime} toc={toc}>
+<PostLayout
+  {...post.data}
+  readingTime={readingTime}
+  toc={toc}
+  backUrl={backUrl}
+  backLabel={backLabel}
+>
   <Content />
 </PostLayout>

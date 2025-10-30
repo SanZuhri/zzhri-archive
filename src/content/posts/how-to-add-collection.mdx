@@ -3,6 +3,41 @@ title: 'How to Add a New Collection'
 pubDate: 2024-10-30
 ---
 
+import FlowDiagram from '@/components/examples/FlowDiagram.astro'
+
+export const collectionSteps = [
+    {
+        number: 1,
+        title: 'Create Folder',
+        description: 'Create a new folder in src/content/ with your collection name'
+    },
+    {
+        number: 2,
+        title: 'Update Config',
+        description: 'Add collection definition to src/content.config.ts'
+    },
+    {
+        number: 3,
+        title: 'Update Collections Page',
+        description: 'Add collection metadata to src/pages/collections.astro'
+    },
+    {
+        number: 4,
+        title: 'Update Collection Routes',
+        description: 'Add collection to routing arrays in [collection].astro files'
+    },
+    {
+        number: 5,
+        title: 'Add First Post',
+        description: 'Create your first post in the new collection folder'
+    },
+    {
+        number: 6,
+        title: 'Build & Test',
+        description: 'Run npm run build and verify your new collection works'
+    }
+]
+
 This guide will walk you through the process of adding a new collection to your Archive.
 
 ## What is a Collection?
@@ -12,6 +47,10 @@ A collection is a group of related posts. For example, you might have collection
 - **Science** - Posts about scientific topics
 - **Art** - Posts about art and artists
 - **Technology** - Posts about tech topics
+
+## Collection Creation Flow
+
+<FlowDiagram steps={collectionSteps} title="Collection Setup Workflow" />
 
 ## Step-by-Step Guide
 

@@ -20,8 +20,12 @@ const { Content, remarkPluginFrontmatter } = await render(post)
 
 const readingTime = remarkPluginFrontmatter.readingTime
 const toc = remarkPluginFrontmatter.toc || []
+
+// Posts from 'posts' collection go back to /guide/
+const backUrl = '/guide/'
+const backLabel = 'guide'
 ---
 
-<PostLayout {...post.data} readingTime={readingTime} toc={toc}>
+<PostLayout {...post.data} readingTime={readingTime} toc={toc} backUrl={backUrl} backLabel={backLabel}>
   <Content />
 </PostLayout>
