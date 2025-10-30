@@ -1,0 +1,41 @@
+---
+import { type CollectionEntry, getCollection } from 'astro:content'
+import PostLayout from '@/layouts/PostLayout.astro'
+import { render } from 'astro:content'
+
+export async function getStaticPaths() {
+  const collections = ['astronomy', 'geography', 'literature'] as const
+  
+  const paths = await Promise.all(
+    collections.map(async (collectionName) => {
+      const posts = await getCollection(collectionName)
+      return posts
+        .filter((post: any) => !post.id.startsWith('_'))
+        .map((post: any) => ({
+          params: { 
+            collection: collectionName,
+            slug: post.id 
+          },
+          props: { post, collection: collectionName }
+        }))
+    })
+  )
+  
+  return paths.flat()
+}
+
+type Props = {
+  post: CollectionEntry<'astronomy'> | CollectionEntry<'geography'> | CollectionEntry<'literature'>
+  collection: string
+}
+
+const { post, collection } = Astro.props
+const { Content, remarkPluginFrontmatter } = await render(post)
+
+const readingTime = remarkPluginFrontmatter.readingTime
+const toc = remarkPluginFrontmatter.toc || []
+---
+
+<PostLayout {...post.data} readingTime={readingTime} toc={toc}>
+  <Content />
+</PostLayout>

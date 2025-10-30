@@ -1,11 +1,18 @@
 ---
 import { themeConfig } from '@/config'
 import ThemeToggle from '@/components/ui/ThemeToggle.astro'
+
+interface Props {
+  pageTitle?: string
+}
+
+const { pageTitle } = Astro.props
+const displayTitle = pageTitle || themeConfig.site.title
 ---
 
 <header>
   <nav>
-    <a href="/">{themeConfig.site.title}</a>
+    <a href="/">{displayTitle}</a>
     <ThemeToggle />
   </nav>
 </header>
@@ -25,4 +32,3 @@ import ThemeToggle from '@/components/ui/ThemeToggle.astro'
     min-width: 3rem;
     display: inline-block;
   }
-</style>

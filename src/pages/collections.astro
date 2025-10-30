@@ -1,0 +1,176 @@
+---
+import IndexLayout from '@/layouts/IndexLayout.astro'
+import { themeConfig } from '@/config'
+import { getCollection } from 'astro:content'
+
+// Definisi collections dengan metadata
+const collections = [
+  {
+    name: 'astronomy',
+    title: 'Astronomy',
+    description: 'Posts about astronomy and space'
+  },
+  {
+    name: 'geography',
+    title: 'Geography',
+    description: 'Posts about geography and earth'
+  },
+  {
+    name: 'literature',
+    title: 'Literature',
+    description: 'Posts about literature and books'
+  }
+]
+
+// Hitung jumlah posts di setiap collection
+const collectionsWithCount = await Promise.all(
+  collections.map(async (col) => {
+    const posts = await getCollection(col.name as 'astronomy' | 'geography' | 'literature')
+    const filteredPosts = posts.filter((post: any) => !post.id.startsWith('_'))
+    return {
+      ...col,
+      count: filteredPosts.length
+    }
+  })
+)
+---
+
+<IndexLayout 
+  title="Collections - " + themeConfig.site.title 
+  description="Browse collections"
+  pageTitle="Collections"
+>
+  <main>
+    <ul class="collection-list">
+      {
+        collectionsWithCount.map((collection) => (
+          <li>
+            <a href={`/collections/${collection.name}/`}>
+              <div class={`collection-item ${!themeConfig.date.dateOnRight ? 'count-left' : ''}`}>
+                {!themeConfig.date.dateOnRight && (
+                  <p class="count font-features">{collection.count}</p>
+                )}
+                <p class="title">{collection.title}</p>
+                {themeConfig.date.dateOnRight && (
+                  <div class={themeConfig.general.postListDottedDivider ? 'dotted-divider' : 'divider'} />
+                )}
+                {themeConfig.date.dateOnRight && (
+                  <p class="count font-features">{collection.count}</p>
+                )}
+              </div>
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+    <div class="placeholder"></div>
+  </main>
+</IndexLayout>
+
+<style>
+  .collection-list {
+    padding: 0;
+    margin: 0;
+    list-style-type: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  a {
+    color: var(--text-primary);
+    display: block;
+    text-decoration: none;
+    transition: opacity 0.15s ease-out;
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .collection-list:hover a {
+      opacity: 0.4;
+    }
+
+    .collection-list:hover a:hover {
+      opacity: 1;
+    }
+
+    .collection-list:hover a:hover .divider {
+      background-color: var(--text-tertiary);
+      opacity: 0.75;
+    }
+    .collection-list:hover a:hover .dotted-divider {
+      color: var(--text-secondary);
+    }
+    .collection-list:hover a:hover .count {
+      color: var(--text-secondary);
+      opacity: 1;
+    }
+  }
+
+  .collection-item {
+    height: 2.75rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .collection-item.count-left {
+    justify-content: flex-start;
+  }
+
+  .collection-item.count-left .title {
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+
+  .collection-item.count-left .count {
+    margin-right: 0.75rem;
+  }
+
+  .title {
+    margin: 0;
+    flex-shrink: 1;
+    min-width: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .count {
+    margin: 0;
+    color: var(--text-secondary);
+    opacity: 0.75;
+    letter-spacing: var(--spacing-s);
+    flex-shrink: 0;
+    white-space: nowrap;
+  }
+
+  .divider {
+    flex: 1 1 auto;
+    min-width: 3rem;
+    margin: 0 0.25rem;
+    height: 0.5px;
+    background-color: var(--border);
+  }
+
+  .dotted-divider {
+    flex: 1 1 3rem;
+    min-width: 3rem;
+    max-width: 100%;
+    text-align: end;
+    letter-spacing: 5px;
+    height: 1.675rem;
+    overflow: hidden;
+    color: var(--text-tertiary);
+    opacity: 0.75;
+  }
+
+  .dotted-divider::after {
+    content: '·····························································································································································';
+    pointer-events: none;
+  }
+
+  .placeholder {
+    height: 3rem;
+  }
+</style>

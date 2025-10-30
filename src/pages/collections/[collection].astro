@@ -1,0 +1,61 @@
+---
+import IndexLayout from '@/layouts/IndexLayout.astro'
+import PostList from '@/components/widgets/PostList.astro'
+import { themeConfig } from '@/config'
+import { getCollection } from 'astro:content'
+
+export async function getStaticPaths() {
+  const collections = ['astronomy', 'geography', 'literature']
+  
+  return collections.map((collection) => ({
+    params: { collection },
+    props: { collection }
+  }))
+}
+
+const { collection } = Astro.props
+
+// Metadata untuk setiap collection
+const collectionMeta: Record<string, { title: string; description: string }> = {
+  astronomy: {
+    title: 'Astronomy',
+    description: 'Posts about astronomy and space'
+  },
+  geography: {
+    title: 'Geography',
+    description: 'Posts about geography and earth'
+  },
+  literature: {
+    title: 'Literature',
+    description: 'Posts about literature and books'
+  }
+}
+
+const meta = collectionMeta[collection]
+const posts = await getCollection(collection as 'astronomy' | 'geography' | 'literature')
+const filteredPosts = posts
+  .filter((post: any) => !post.id.startsWith('_'))
+  .sort((a: any, b: any) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
+---
+
+<IndexLayout 
+  title={meta.title + ' - ' + themeConfig.site.title} 
+  description={meta.description}
+  pageTitle={meta.title}
+>
+  <main>
+    {filteredPosts.length > 0 ? (
+      <PostList posts={filteredPosts} urlPrefix={`/collections/${collection}/`} />
+    ) : (
+      <p class="empty-message">No posts yet.</p>
+    )}
+  </main>
+</IndexLayout>
+
+<style>
+  .empty-message {
+    color: var(--text-secondary);
+    opacity: 0.75;
+    padding: 2rem 0;
+  }
+</style>

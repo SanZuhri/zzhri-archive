@@ -1,0 +1,192 @@
+---
+import { themeConfig } from '@/config'
+
+const currentPath = Astro.url.pathname
+const isCollectionsPage = currentPath.startsWith('/collections')
+---
+
+<div class="nav-sidebar-container" id="nav-sidebar">
+  <nav class="nav-sidebar">
+    <ul class="nav-list">
+      <li class="nav-item">
+        <a href="/" class={`nav-link ${currentPath === '/' ? 'active' : ''}`} data-text="Home">
+          Home
+        </a>
+      </li>
+
+      <li class="nav-item">
+        <a
+          href="/collections/"
+          class={`nav-link ${isCollectionsPage ? 'active' : ''}`}
+          data-text="Collections"
+        >
+          Collections
+        </a>
+      </li>
+    </ul>
+  </nav>
+</div>
+
+<script
+  is:inline
+  define:vars={{
+    contentWidth: themeConfig.general.contentWidth,
+    centeredLayout: themeConfig.general.centeredLayout
+  }}
+>
+  ;(function () {
+    let container = null
+
+    function adjustPosition() {
+      container = document.querySelector('.nav-sidebar-container')
+      if (!container || !centeredLayout) {
+        if (container) container.style.display = 'none'
+        return
+      }
+
+      const pageWidth = window.innerWidth
+      const contentWidthValue = Math.max(parseFloat(contentWidth), 25)
+      const margin = (pageWidth - contentWidthValue * 16) / 2
+      const minSpace = 11 * 16 + 52
+
+      if (margin >= minSpace) {
+        container.style.display = 'block'
+        container.classList.add('fixed-position')
+        const leftPosition = margin - 176 - 40
+        container.style.left = `${leftPosition}px`
+      } else {
+        container.style.display = 'none'
+        container.classList.remove('fixed-position')
+        container.style.left = ''
+      }
+    }
+
+    function init() {
+      adjustPosition()
+    }
+
+    document.addEventListener('astro:page-load', init)
+    document.addEventListener('astro:after-swap', init)
+    document.addEventListener('DOMContentLoaded', init)
+    window.addEventListener('resize', adjustPosition)
+  })()
+</script>
+
+<style is:inline>
+  .nav-sidebar-container {
+    width: 12rem;
+    position: relative;
+    left: -0.175em;
+    opacity: 0;
+    transition: opacity 0.2s ease-out;
+    display: none;
+  }
+
+  .nav-sidebar-container.fixed-position {
+    opacity: 1;
+    position: fixed;
+    top: 12rem;
+    margin-top: 0;
+    padding-left: 1rem;
+    z-index: 10;
+    left: auto;
+  }
+
+  .nav-sidebar {
+    font-family: var(--sans);
+  }
+
+  .nav-list,
+  .nav-list li,
+  .nav-item {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .nav-item::before,
+  .nav-item::marker {
+    display: none;
+  }
+
+  .nav-link {
+    display: block;
+    color: transparent;
+    text-decoration: none;
+    position: relative;
+    padding-left: 0;
+    height: 1.125rem;
+    width: 100%;
+    min-height: 1rem;
+    font-size: 0;
+    line-height: 1.125rem;
+    text-indent: 2rem;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    transition:
+      color 0.2s ease-out,
+      font-size 0.2s ease-out,
+      text-indent 0.2s ease-out;
+    cursor: pointer;
+  }
+
+  .nav-link::after {
+    content: attr(data-text);
+    position: absolute;
+    left: -0.5rem;
+    top: 0;
+    font-family: var(--sans);
+    font-size: var(--font-size-s);
+    letter-spacing: var(--spacing-m);
+    line-height: 1.125rem;
+    color: var(--text-primary);
+    opacity: 0;
+    transition:
+      opacity 0.2s ease-out,
+      left 0.2s ease-out;
+    pointer-events: none;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    max-width: 100%;
+  }
+
+  .nav-link:hover::after {
+    opacity: 1;
+    left: -0.75rem;
+  }
+
+  .nav-link.active {
+    color: var(--text-primary);
+  }
+
+  .nav-link::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 50%;
+    width: 2.5rem;
+    height: 1px;
+    background-color: var(--text-tertiary);
+    transform: translateY(-50%);
+    opacity: 0.4;
+    transition: all 0.1s ease-out;
+  }
+
+  .nav-link:hover::before,
+  .nav-link.active::before {
+    opacity: 0.8;
+    background-color: var(--text-primary);
+  }
+
+  .nav-link:hover::before {
+    width: 0.75rem;
+  }
+
+  @media (max-width: 768px) {
+    .nav-sidebar-container {
+      display: none !important;
+    }
+  }
+</style>
