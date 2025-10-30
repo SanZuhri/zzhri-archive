@@ -45,7 +45,25 @@ export default defineConfig({
       alias: {
         '@': path.resolve('./src')
       }
+    },
+    build: {
+      cssMinify: 'lightningcss',
+      minify: 'terser',
+      terserOptions: {
+        compress: {
+          drop_console: true,
+          drop_debugger: true
+        }
+      }
     }
+  },
+  build: {
+    inlineStylesheets: 'auto'
+  },
+  compressHTML: true,
+  prefetch: {
+    prefetchAll: true,
+    defaultStrategy: 'viewport'
   },
   devToolbar: {
     enabled: false

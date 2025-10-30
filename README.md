@@ -1,64 +1,71 @@
-# Chiri 🌸
+# Archive
 
-![screenshot-light](public/screenshots/screenshot-light.png)
-![screenshot-dark](public/screenshots/screenshot-dark.png)
-
-Chiri is a minimal blog theme built with [Astro](https://astro.build), offering customization options while preserving its clean aesthetic.
-
-Check the [demo](https://astro-chiri.netlify.app/) for more details.
+Minimal collection and archive system built with Astro and Chiri theme.
 
 ## Features
 
-- [x] Build with Astro
-- [x] Responsive
-- [x] Light / Dark mode
-- [x] MDX
-- [x] KaTeX
-- [x] Sitemap
-- [x] OpenGraph
-- [x] RSS
-- [ ] Pagination
+- Collections system for organizing content
+- Sidebar navigation (desktop) and mobile menu
+- MDX support with interactive components
+- Dark/light theme toggle
+- Performance optimized
 
-## Getting Started
+## Quick Start
 
-1. [Fork](https://github.com/the3ash/astro-chiri/fork) this repository, or use this template to [create a new repository](https://github.com/new?template_name=astro-chiri&template_owner=the3ash).
+```bash
+pnpm install
+pnpm dev
+```
 
-2. Run the following commands:
+Visit `http://localhost:4321`
 
-   ```bash
-   git clone <your-repo-url>
+## Structure
 
-   cd <your-repo-name>
+```
+src/
+├── content/
+│   ├── posts/       # Guide posts
+│   ├── astronomy/   # Collections
+│   ├── geography/
+│   ├── literature/
+│   └── movie/
+├── pages/           # Routes
+└── config.ts        # Configuration
+```
 
-   pnpm install
+## Add Content
 
-   pnpm dev
-   ```
+Create `.md` or `.mdx` file in collection folder:
 
-3. Edit `src/config.ts` and `src/content/about/about.md` to your liking.
+```markdown
+---
+title: 'Post Title'
+pubDate: 2024-10-31
+---
 
-4. Use `pnpm new <title>` to create new posts, or add your posts to `src/content/posts`.
+Content here...
+```
 
-5. You need to set adapter as follows before deploying to Netlify, Vercel, or other platforms, but you can set `linkCard` to `false` in `src/config.ts` to skip this step:
-   - **Netlify**: `pnpm add @astrojs/netlify` and add `adapter: netlify()` in `astro.config.ts`.
-   - **Vercel**: `pnpm add @astrojs/vercel` and add `adapter: vercel()` in `astro.config.ts`.
-   - **Static (e.g. GitHub Pages)**: `pnpm add @astrojs/static` and add `adapter: static()` in `astro.config.ts`.
-   - Refer to [Astro Deployment Guides](https://docs.astro.build/en/guides/deploy/) for more details.
+## Configuration
 
-&emsp;[![Deploy to Netlify](https://www.netlify.com/img/deploy/button.svg)](https://app.netlify.com/start) [![Deploy to Vercel](https://vercel.com/button)](https://vercel.com/new)
+Edit `src/config.ts` for site settings.
 
-## Commands
+## Build
 
-- `pnpm new <title>` - Create a new post (use `_title` for drafts)
-- `pnpm update-theme` - Update the theme to the latest version
+```bash
+pnpm build
+pnpm preview
+```
 
-## References
+## Documentation
 
-- https://paco.me/
-- https://benji.org/
-- https://shud.in/
-- https://retypeset.radishzz.cc/
+Visit `/guide/` for:
+- How to add posts
+- How to add collections
+- Markdown vs MDX guide
+- Using MDX components
+- Customization tips
 
-## License
+---
 
-MIT
+Built with [Astro](https://astro.build) and [Chiri](https://github.com/the3ash/astro-chiri)
