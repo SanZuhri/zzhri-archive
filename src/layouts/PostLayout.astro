@@ -18,6 +18,7 @@ import CopyCode from '@/components/ui/CopyCode.astro'
 import CopyLink from '@/components/ui/CopyLink.astro'
 import PostNavigation from '@/components/ui/PostNavigation.astro'
 import ReadingProgress from '@/components/ui/ReadingProgress.astro'
+import ThemeToggle from '@/components/ui/ThemeToggle.astro'
 import BaseLayout from '@/layouts/BaseLayout.astro'
 
 import { themeConfig } from '@/config'
@@ -75,9 +76,10 @@ if (backUrl !== '/') {
            </div>
          </div>
          <slot />
-         <PostNavigation collection={collection} currentSlug={postSlug}>
-           <CopyLink />
-         </PostNavigation>
+          <PostNavigation collection={collection} currentSlug={postSlug}>
+            <CopyLink />
+            <ThemeToggle />
+          </PostNavigation>
        </div>
     </main>
     <ImageOptimizer />
