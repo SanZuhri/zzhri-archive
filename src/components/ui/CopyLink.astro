@@ -1,0 +1,116 @@
+---
+// Copy Link Button Component
+// Allows users to copy the current page URL to clipboard
+---
+
+<button id="copy-link-btn" class="copy-link-btn" aria-label="Copy link">
+  <svg class="link-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path>
+    <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>
+  </svg>
+  <svg class="check-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display: none;">
+    <polyline points="20,6 9,17 4,12"></polyline>
+  </svg>
+</button>
+
+<script>
+  function initCopyLink() {
+    const button = document.getElementById('copy-link-btn')
+    const linkIcon = button?.querySelector('.link-icon')
+    const checkIcon = button?.querySelector('.check-icon')
+
+    if (!button || !linkIcon || !checkIcon) return
+
+    button.addEventListener('click', async () => {
+      try {
+        await navigator.clipboard.writeText(window.location.href)
+
+        // Show success feedback
+        linkIcon.style.display = 'none'
+        checkIcon.style.display = 'block'
+        button.classList.add('copied')
+
+        // Reset after 2 seconds
+        setTimeout(() => {
+          linkIcon.style.display = 'block'
+          checkIcon.style.display = 'none'
+          button.classList.remove('copied')
+        }, 2000)
+      } catch {
+        // Fallback for older browsers
+        const textArea = document.createElement('textarea')
+        textArea.value = window.location.href
+        document.body.appendChild(textArea)
+        textArea.select()
+        document.execCommand('copy')
+        document.body.removeChild(textArea)
+
+        // Still show feedback
+        linkIcon.style.display = 'none'
+        checkIcon.style.display = 'block'
+        button.classList.add('copied')
+
+        setTimeout(() => {
+          linkIcon.style.display = 'block'
+          checkIcon.style.display = 'none'
+          button.classList.remove('copied')
+        }, 2000)
+      }
+    })
+  }
+
+  // Initialize on page load
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initCopyLink)
+  } else {
+    initCopyLink()
+  }
+
+  // Re-initialize on Astro page transitions
+  document.addEventListener('astro:page-load', initCopyLink)
+</script>
+
+<style>
+  .copy-link-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.5rem;
+    height: 1.5rem;
+    color: var(--text-secondary);
+    transition: color 0.2s ease;
+    opacity: 0.7;
+  }
+
+  .copy-link-btn:hover {
+    color: var(--text-primary);
+    opacity: 1;
+  }
+
+  .copy-link-btn.copied {
+    color: var(--text-primary);
+    opacity: 1;
+  }
+
+  .link-icon,
+  .check-icon {
+    width: 1rem;
+    height: 1rem;
+  }
+
+  @media (max-width: 600px) {
+    .copy-link-btn {
+      width: 1.25rem;
+      height: 1.25rem;
+    }
+
+    .link-icon,
+    .check-icon {
+      width: 0.875rem;
+      height: 0.875rem;
+    }
+  }
+</style>
