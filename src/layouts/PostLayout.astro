@@ -16,6 +16,7 @@ import NeoDBCard from '@/components/ui/NeoDBCard.astro'
 import XPOST from '@/components/ui/XPOST.astro'
 import CopyCode from '@/components/ui/CopyCode.astro'
 import CopyLink from '@/components/ui/CopyLink.astro'
+import PostNavigation from '@/components/ui/PostNavigation.astro'
 import ReadingProgress from '@/components/ui/ReadingProgress.astro'
 import BaseLayout from '@/layouts/BaseLayout.astro'
 
@@ -30,6 +31,15 @@ const { title, pubDate, readingTime, toc, backUrl = '/', backLabel = 'index' } =
 
 const postSlug = Astro.url.pathname.split('/').filter(Boolean).pop() || ''
 const ogImage = `/open-graph/${postSlug}.png`
+
+// Determine collection
+let collection = 'posts'
+if (backUrl !== '/') {
+  const match = backUrl.match(/\/collections\/([^/]+)/)
+  if (match) {
+    collection = match[1]
+  }
+}
 ---
 
 <BaseLayout
@@ -65,9 +75,9 @@ const ogImage = `/open-graph/${postSlug}.png`
            </div>
          </div>
          <slot />
-         <div class="post-footer">
+         <PostNavigation collection={collection} currentSlug={postSlug}>
            <CopyLink />
-         </div>
+         </PostNavigation>
        </div>
     </main>
     <ImageOptimizer />
@@ -93,11 +103,5 @@ const ogImage = `/open-graph/${postSlug}.png`
     flex: 1;
   }
 
-  .post-footer {
-    display: flex;
-    justify-content: flex-end;
-    margin-top: 2rem;
-    padding-top: 1rem;
-    border-top: 1px solid var(--border);
-  }
+
 </style>

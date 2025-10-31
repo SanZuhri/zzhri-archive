@@ -1,0 +1,128 @@
+---
+import { getCollection } from 'astro:content'
+
+interface Props {
+  collection: string
+  currentSlug: string
+}
+
+const { collection, currentSlug } = Astro.props
+
+// Get all posts in the collection
+const posts = await getCollection(collection as 'posts' | 'astronomy' | 'geography' | 'literature' | 'movie')
+const sortedPosts = posts
+  .filter((post) => !post.id.startsWith('_'))
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
+
+// Find current post index
+const currentIndex = sortedPosts.findIndex((post) => post.id === currentSlug)
+
+// Get prev and next posts
+const prevPost = currentIndex > 0 ? sortedPosts[currentIndex - 1] : null
+const nextPost = currentIndex < sortedPosts.length - 1 ? sortedPosts[currentIndex + 1] : null
+
+// Generate URLs
+const prevUrl = prevPost ? (collection === 'posts' ? `/${prevPost.id}/` : `/collections/${collection}/${prevPost.id}/`) : null
+const nextUrl = nextPost ? (collection === 'posts' ? `/${nextPost.id}/` : `/collections/${collection}/${nextPost.id}/`) : null
+---
+
+<div class="post-navigation">
+  {prevPost && (
+    <a href={prevUrl} class="nav-link prev-link" aria-label={`Previous post: ${prevPost.data.title}`}>
+      <span class="nav-arrow">←</span>
+      <span class="nav-title">{prevPost.data.title}</span>
+    </a>
+  )}
+
+  <slot />
+
+  {nextPost && (
+    <a href={nextUrl} class="nav-link next-link" aria-label={`Next post: ${nextPost.data.title}`}>
+      <span class="nav-title">{nextPost.data.title}</span>
+      <span class="nav-arrow">→</span>
+    </a>
+  )}
+</div>
+
+<style>
+  .post-navigation {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    margin-top: 2rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--border);
+  }
+
+  .post-navigation:has(.prev-link:not(.next-link)) {
+    justify-content: flex-start;
+  }
+
+  .post-navigation:has(.next-link:not(.prev-link)) {
+    justify-content: flex-end;
+  }
+
+  .nav-link {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--text-secondary);
+    text-decoration: none;
+    transition: color 0.2s ease;
+    flex: 1;
+    min-width: 0;
+  }
+
+  .nav-link:hover {
+    color: var(--text-primary);
+  }
+
+  .prev-link {
+    justify-content: flex-start;
+  }
+
+  .next-link {
+    justify-content: flex-end;
+    text-align: right;
+  }
+
+  .nav-arrow {
+    font-size: 1.2rem;
+    font-weight: var(--font-weight-bold);
+    flex-shrink: 0;
+  }
+
+  .nav-title {
+    font-size: 0.9rem;
+    line-height: 1.3;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  @media (max-width: 600px) {
+    .post-navigation {
+      flex-direction: column;
+      gap: 1rem;
+      align-items: stretch;
+    }
+
+    .nav-link {
+      justify-content: center;
+    }
+
+    .prev-link,
+    .next-link {
+      text-align: center;
+    }
+
+    .nav-title {
+      font-size: 0.8rem;
+    }
+
+    .nav-arrow {
+      font-size: 1rem;
+    }
+  }
+</style>
