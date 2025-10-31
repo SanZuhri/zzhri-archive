@@ -1,0 +1,95 @@
+---
+// Author Bio Component
+// Minimal author information display
+---
+
+<div class="author-bio">
+  <div class="author-avatar">
+    <img 
+      src="/images/profile.jpg" 
+      alt="Zzhri" 
+      width="48" 
+      height="48"
+      loading="lazy"
+      class="author-image"
+    />
+  </div>
+  <div class="author-info">
+    <div class="written-by">Written by</div>
+    <div class="author-name">Zzhri</div>
+    <div class="author-tag">Movie Enthusiast & Creator</div>
+  </div>
+</div>
+
+<style>
+  .author-bio {
+    margin-top: 3rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .author-avatar {
+    flex-shrink: 0;
+    width: 4rem;
+    height: 4rem;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 2px solid var(--border);
+    background: var(--bg-secondary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.25rem;
+  }
+
+  .author-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.125rem;
+    position: relative;
+    padding-left: 0.5rem;
+  }
+
+  .written-by {
+    font-size: 0.7rem;
+    color: var(--text-secondary);
+    opacity: 0.8;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 0.125rem;
+  }
+
+  .author-name {
+    font-size: 0.9rem;
+    font-weight: var(--font-weight-bold);
+    color: var(--text-primary);
+  }
+
+  .author-tag {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+  }
+
+  .author-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+  }
+
+  @media (max-width: 600px) {
+    .author-bio {
+      margin-top: 1.5rem;
+      gap: 0.5rem;
+    }
+
+    .author-name {
+      font-size: 0.85rem;
+    }
+
+    .author-tag {
+      font-size: 0.75rem;
+    }
+  }
+</style>

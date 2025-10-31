@@ -1,0 +1,27 @@
+---
+// Current Date Component
+// Displays today's date in a minimal format
+---
+
+<div class="current-date">
+  {new Date().toLocaleDateString('en-US', {
+    weekday: 'long',
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric'
+  })}
+</div>
+
+<style>
+  .current-date {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    font-weight: var(--font-weight-normal);
+  }
+
+  @media (max-width: 600px) {
+    .current-date {
+      font-size: 0.75rem;
+    }
+  }
+</style>

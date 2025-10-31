@@ -1,0 +1,65 @@
+---
+// Gesture Navigation Component
+// Enables swipe gestures for post navigation on touch devices
+---
+
+<script>
+  function initGestureNavigation() {
+    let startX = 0
+    let startY = 0
+    let isTracking = false
+
+    const threshold = 100 // Minimum swipe distance in pixels
+    const maxVertical = 50 // Maximum vertical movement allowed for horizontal swipe
+
+    function handleTouchStart(e: TouchEvent) {
+      if (e.touches.length === 1) {
+        startX = e.touches[0].clientX
+        startY = e.touches[0].clientY
+        isTracking = true
+      }
+    }
+
+    function handleTouchEnd(e: TouchEvent) {
+      if (!isTracking) return
+
+      const endX = e.changedTouches[0].clientX
+      const endY = e.changedTouches[0].clientY
+      const deltaX = endX - startX
+      const deltaY = endY - startY
+
+      // Check if it's a valid horizontal swipe
+      if (Math.abs(deltaX) > threshold && Math.abs(deltaY) < maxVertical) {
+        const prevLink = document.querySelector('.prev-link') as HTMLAnchorElement
+        const nextLink = document.querySelector('.next-link') as HTMLAnchorElement
+
+        if (deltaX > 0 && prevLink) {
+          // Swipe right: previous post
+          window.location.href = prevLink.href
+        } else if (deltaX < 0 && nextLink) {
+          // Swipe left: next post
+          window.location.href = nextLink.href
+        }
+      }
+
+      isTracking = false
+    }
+
+    // Add event listeners to the post container
+    const postContainer = document.querySelector('.post-container')
+    if (postContainer) {
+      postContainer.addEventListener('touchstart', handleTouchStart, { passive: true })
+      postContainer.addEventListener('touchend', handleTouchEnd, { passive: true })
+    }
+  }
+
+  // Initialize on page load
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initGestureNavigation)
+  } else {
+    initGestureNavigation()
+  }
+
+  // Re-initialize on Astro page transitions
+  document.addEventListener('astro:page-load', initGestureNavigation)
+</script>

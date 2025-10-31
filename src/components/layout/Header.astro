@@ -1,5 +1,6 @@
 ---
 import { themeConfig } from '@/config'
+import CurrentDate from '@/components/ui/CurrentDate.astro'
 import ThemeToggle from '@/components/ui/ThemeToggle.astro'
 
 interface Props {
@@ -12,7 +13,10 @@ const displayTitle = pageTitle || themeConfig.site.title
 
 <header>
   <nav>
-    <a href="/">{displayTitle}</a>
+    <div class="nav-left">
+      <a href="/">{displayTitle}</a>
+      <CurrentDate />
+    </div>
     <ThemeToggle />
   </nav>
 </header>
@@ -24,6 +28,12 @@ const displayTitle = pageTitle || themeConfig.site.title
     display: flex;
     justify-content: space-between;
     align-items: center;
+  }
+
+  .nav-left {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
   }
 
   .nav-actions {

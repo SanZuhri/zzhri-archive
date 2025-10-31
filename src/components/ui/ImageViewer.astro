@@ -1,20 +1,39 @@
 <div id="image-viewer" class="image-viewer">
+  <button id="image-viewer-prev" class="image-nav prev" aria-label="Previous image">‹</button>
   <img id="image-viewer-img" src="" alt="" />
+  <button id="image-viewer-next" class="image-nav next" aria-label="Next image">›</button>
+  <button id="image-viewer-close" class="image-close" aria-label="Close gallery">×</button>
+  <div id="image-viewer-counter" class="image-counter"></div>
 </div>
 
 <script>
   function initImageViewer() {
     const viewer = document.getElementById('image-viewer')
     const viewerImg = document.getElementById('image-viewer-img') as HTMLImageElement
+    const prevBtn = document.getElementById('image-viewer-prev') as HTMLButtonElement
+    const nextBtn = document.getElementById('image-viewer-next') as HTMLButtonElement
+    const closeBtn = document.getElementById('image-viewer-close') as HTMLButtonElement
+    const counter = document.getElementById('image-viewer-counter') as HTMLDivElement
 
     if (!viewer || !viewerImg || viewerImg.tagName !== 'IMG') return
 
+    let currentImages: HTMLImageElement[] = []
+    let currentIndex = 0
+
     // Display image in fullscreen viewer overlay
-    function showImage(src: string, alt?: string) {
-      if (viewerImg && src) {
-        viewerImg.src = src
-        viewerImg.alt = alt || ''
+    function showImage(index: number) {
+      if (index < 0 || index >= currentImages.length) return
+
+      currentIndex = index
+      const img = currentImages[index]
+      if (viewerImg && img) {
+        viewerImg.src = img.src
+        viewerImg.alt = img.alt || ''
       }
+
+      // Update navigation
+      updateNavigation()
+
       // Show visibility first
       viewer!.style.visibility = 'visible'
       void viewer!.offsetWidth
@@ -28,11 +47,21 @@
       }, 10)
     }
 
+    function updateNavigation() {
+      const hasMultiple = currentImages.length > 1
+      prevBtn.style.display = hasMultiple ? 'block' : 'none'
+      nextBtn.style.display = hasMultiple ? 'block' : 'none'
+      counter.style.display = hasMultiple ? 'block' : 'none'
+      counter.textContent = hasMultiple ? `${currentIndex + 1} / ${currentImages.length}` : ''
+    }
+
     // Hide the image viewer and restore page scroll
     function hideImage() {
       viewer!.classList.remove('active')
       document.body.classList.remove('image-viewer-open')
       document.body.style.overflow = ''
+      currentImages = []
+      currentIndex = 0
     }
 
     // Hide and clear image after transition ends
@@ -59,12 +88,39 @@
         imgElement.addEventListener('click', (e) => {
           e.preventDefault()
           const target = e.target as HTMLImageElement
-          showImage(target.src, target.alt || '')
+          // Collect all preview images in the post
+          const postContainer = target.closest('.post-container') || document
+          currentImages = Array.from(postContainer.querySelectorAll('img[data-preview="true"]')) as HTMLImageElement[]
+          const index = currentImages.indexOf(target)
+          if (index !== -1) {
+            showImage(index)
+          }
         })
       })
     }
 
-    viewer?.addEventListener('click', hideImage)
+    // Navigation buttons
+    prevBtn?.addEventListener('click', (e) => {
+      e.stopPropagation()
+      showImage(currentIndex - 1)
+    })
+
+    nextBtn?.addEventListener('click', (e) => {
+      e.stopPropagation()
+      showImage(currentIndex + 1)
+    })
+
+    closeBtn?.addEventListener('click', (e) => {
+      e.stopPropagation()
+      hideImage()
+    })
+
+    // Click outside to close (but not on image)
+    viewer?.addEventListener('click', (e) => {
+      if (e.target === viewer) {
+        hideImage()
+      }
+    })
 
     // Prevent touch scroll in image viewer
     viewer?.addEventListener(
@@ -78,8 +134,14 @@
     )
 
     document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape' && viewer.classList.contains('active')) {
+      if (!viewer.classList.contains('active')) return
+
+      if (e.key === 'Escape') {
         hideImage()
+      } else if (e.key === 'ArrowLeft' && currentImages.length > 1) {
+        showImage(currentIndex - 1)
+      } else if (e.key === 'ArrowRight' && currentImages.length > 1) {
+        showImage(currentIndex + 1)
       }
     })
 
@@ -136,9 +198,85 @@
     cursor: zoom-out;
   }
 
+  .image-nav {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(0, 0, 0, 0.5);
+    color: white;
+    border: none;
+    width: 3rem;
+    height: 3rem;
+    border-radius: 50%;
+    font-size: 1.5rem;
+    cursor: pointer;
+    display: none;
+    z-index: 10000;
+    transition: background-color 0.2s ease;
+  }
+
+  .image-nav:hover {
+    background: rgba(0, 0, 0, 0.7);
+  }
+
+  .image-nav.prev {
+    left: 1rem;
+  }
+
+  .image-nav.next {
+    right: 1rem;
+  }
+
+  .image-close {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: rgba(0, 0, 0, 0.5);
+    color: white;
+    border: none;
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 50%;
+    font-size: 1.25rem;
+    cursor: pointer;
+    z-index: 10000;
+    transition: background-color 0.2s ease;
+  }
+
+  .image-close:hover {
+    background: rgba(0, 0, 0, 0.7);
+  }
+
+  .image-counter {
+    position: absolute;
+    bottom: 1rem;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0, 0, 0, 0.5);
+    color: white;
+    padding: 0.25rem 0.75rem;
+    border-radius: 1rem;
+    font-size: 0.875rem;
+    display: none;
+  }
+
   @media (max-width: 768px) {
     .image-viewer img {
       min-width: 100vw;
+    }
+
+    .image-nav {
+      width: 2.5rem;
+      height: 2.5rem;
+      font-size: 1.25rem;
+    }
+
+    .image-nav.prev {
+      left: 0.5rem;
+    }
+
+    .image-nav.next {
+      right: 0.5rem;
     }
   }
 
