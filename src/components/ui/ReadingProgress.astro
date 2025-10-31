@@ -1,0 +1,55 @@
+---
+// Reading Progress Bar Component
+// Displays a thin progress bar at the top of the page that fills as user scrolls
+---
+
+<div id="reading-progress" class="reading-progress"></div>
+
+<script>
+  function updateProgress() {
+    const progressBar = document.getElementById('reading-progress')
+    if (!progressBar) return
+
+    const scrollTop = window.scrollY
+    const documentHeight = document.documentElement.scrollHeight - window.innerHeight
+    const progress = (scrollTop / documentHeight) * 100
+
+    // Only show if progress is meaningful (>5%)
+    if (progress > 5) {
+      progressBar.style.width = `${Math.min(progress, 100)}%`
+      progressBar.style.opacity = '1'
+    } else {
+      progressBar.style.opacity = '0'
+    }
+  }
+
+  function initProgressBar() {
+    window.addEventListener('scroll', updateProgress, { passive: true })
+    // Initial check
+    updateProgress()
+  }
+
+  // Initialize on page load
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initProgressBar)
+  } else {
+    initProgressBar()
+  }
+
+  // Re-initialize on Astro page transitions
+  document.addEventListener('astro:page-load', initProgressBar)
+</script>
+
+<style>
+  .reading-progress {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 0%;
+    height: 3px;
+    background-color: var(--text-primary);
+    z-index: 1000;
+    transition: width 0.1s ease-out, opacity 0.2s ease-out;
+    opacity: 0;
+  }
+</style>
