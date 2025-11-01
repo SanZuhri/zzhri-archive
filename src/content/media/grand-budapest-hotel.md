@@ -1,6 +1,7 @@
 ---
 title: 'The Grand Budapest Hotel'
 pubDate: 2025-10-31
+tags: ['movies', 'film', 'wes-anderson']
 ---
 
 **The Grand Budapest Hotel** (2014) is a visually stunning comedy-drama film written and directed by Wes Anderson. The film is a masterpiece of symmetrical composition, vibrant color palettes, and meticulous production design.

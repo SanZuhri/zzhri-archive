@@ -28,6 +28,7 @@ Create `.md` file in collection folder:
 ---
 title: 'Title'
 pubDate: 2024-10-31
+tags: ['tag1', 'tag2']  # Optional
 ---
 
 Content...

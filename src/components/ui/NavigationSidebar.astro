@@ -4,6 +4,8 @@ import { themeConfig } from '@/config'
 const currentPath = Astro.url.pathname
 const isCollectionsPage = currentPath.startsWith('/collections')
 const isGuidePage = currentPath.startsWith('/guide')
+const isArchivePage = currentPath.startsWith('/archive')
+const isTagsPage = currentPath.startsWith('/tags')
 ---
 
 <div class="nav-sidebar-container" id="nav-sidebar">
@@ -32,6 +34,26 @@ const isGuidePage = currentPath.startsWith('/guide')
           data-text="Guide"
         >
           Guide
+        </a>
+      </li>
+
+      <li class="nav-item">
+        <a
+          href="/archive/"
+          class={`nav-link ${isArchivePage ? 'active' : ''}`}
+          data-text="Archive"
+        >
+          Archive
+        </a>
+      </li>
+
+      <li class="nav-item">
+        <a
+          href="/tags/"
+          class={`nav-link ${isTagsPage ? 'active' : ''}`}
+          data-text="Tags"
+        >
+          Tags
         </a>
       </li>
     </ul>

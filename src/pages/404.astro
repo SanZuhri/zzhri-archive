@@ -3,11 +3,58 @@ import { themeConfig } from '@/config'
 import IndexLayout from '@/layouts/IndexLayout.astro'
 ---
 
-<IndexLayout title={`404 - ${themeConfig.site.title}`} description="Not Found">
-  <style>
-    .error-container {
-      color: var(--text-secondary);
-    }
-  </style>
-  <p class="error-container">Page Not Found...</p>
+<IndexLayout title={`404 - ${themeConfig.site.title}`} description="Not Found" pageTitle="404">
+  <main class="error-page">
+    <p class="message">Page not found.</p>
+    
+    <div class="suggestions">
+      <p>Maybe try one of these?</p>
+      <ul>
+        <li><a href="/">Home</a></li>
+        <li><a href="/collections/">Collections</a></li>
+        <li><a href="/archive/">Archive</a></li>
+        <li><a href="/guide/">Guide</a></li>
+      </ul>
+    </div>
+  </main>
 </IndexLayout>
+
+<style>
+  .error-page {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+  }
+
+  .message {
+    color: var(--text-secondary);
+    opacity: 0.75;
+    margin: 0;
+  }
+
+  .suggestions p {
+    color: var(--text-secondary);
+    opacity: 0.75;
+    margin: 0 0 0.75rem 0;
+    font-size: 0.875rem;
+  }
+
+  .suggestions ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .suggestions a {
+    color: var(--text-primary);
+    text-decoration: none;
+    transition: opacity 0.15s ease-out;
+  }
+
+  .suggestions a:hover {
+    opacity: 0.6;
+  }
+</style>

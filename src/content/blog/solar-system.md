@@ -1,6 +1,7 @@
 ---
 title: 'Our Solar System'
 pubDate: 2025-10-20
+tags: ['astronomy', 'science', 'planets']
 ---
 
 The Solar System consists of the Sun and all the objects that orbit around it, including eight planets, their moons, and countless smaller bodies.

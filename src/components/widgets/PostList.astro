@@ -1,20 +1,22 @@
 ---
 import FormattedDate from '@/components/widgets/FormattedDate.astro'
+import TagBadge from '@/components/ui/TagBadge.astro'
 import type { PostListProps } from '@/types'
 import { themeConfig } from '@/config'
 
 interface Props extends PostListProps {
   urlPrefix?: string
+  showTags?: boolean
 }
 
-const { posts, urlPrefix = '' } = Astro.props as Props
+const { posts, urlPrefix = '', showTags = true } = Astro.props as Props
 ---
 
 <ul>
   {
     posts.map((post) => (
       <li>
-        <a href={urlPrefix ? `${urlPrefix}${post.id}/` : `/${post.id}/`}>
+        <a href={urlPrefix ? `${urlPrefix}${post.id}/` : `/${post.id}/`} class="post-link">
           <div class={`post-item ${!themeConfig.date.dateOnRight ? 'date-left' : ''}`}>
             {!themeConfig.date.dateOnRight && (
               <p class="date font-features">
@@ -34,6 +36,13 @@ const { posts, urlPrefix = '' } = Astro.props as Props
             )}
           </div>
         </a>
+        {showTags && post.data.tags && post.data.tags.length > 0 && (
+          <div class="tags-container" onclick="event.stopPropagation()">
+            {post.data.tags.map((tag: string) => (
+              <TagBadge tag={tag} />
+            ))}
+          </div>
+        )}
       </li>
     ))
   }
@@ -50,37 +59,55 @@ const { posts, urlPrefix = '' } = Astro.props as Props
     gap: 0;
   }
 
-  a {
+  li {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: 0.75rem 0;
+  }
+
+  li:not(:last-child) {
+    border-bottom: 1px solid var(--border);
+  }
+
+  .post-link {
     color: var(--text-primary);
     display: block;
     text-decoration: none;
     transition: opacity 0.15s ease-out;
   }
 
+  .tags-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.375rem;
+    padding-left: 0;
+  }
+
   @media (hover: hover) and (pointer: fine) {
-    ul:hover a {
+    ul:hover .post-link {
       opacity: 0.4;
     }
 
-    ul:hover a:hover {
+    ul:hover .post-link:hover {
       opacity: 1;
     }
 
-    ul:hover a:hover .divider {
+    ul:hover .post-link:hover .divider {
       background-color: var(--text-tertiary);
       opacity: 0.75;
     }
-    ul:hover a:hover .dotted-divider {
+    ul:hover .post-link:hover .dotted-divider {
       color: var(--text-secondary);
     }
-    ul:hover a:hover .date {
+    ul:hover .post-link:hover .date {
       color: var(--text-secondary);
       opacity: 1;
     }
   }
 
   .post-item {
-    height: 2.75rem;
+    min-height: 2.75rem;
     display: flex;
     justify-content: space-between;
     align-items: center;

@@ -1,6 +1,6 @@
 ---
 title: 'Customizing Your Archive'
-pubDate: 2024-10-28
+pubDate: 2025-10-28
 ---
 
 Want to make this archive yours? Here's what you can change.

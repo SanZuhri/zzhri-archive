@@ -1,0 +1,241 @@
+---
+import IndexLayout from '@/layouts/IndexLayout.astro'
+import Breadcrumbs from '@/components/ui/Breadcrumbs.astro'
+import type { BreadcrumbItem } from '@/components/ui/Breadcrumbs.astro'
+import { themeConfig } from '@/config'
+import { getCollection } from 'astro:content'
+import { getCollectionKeys } from '@/collections.config'
+
+// Get all posts from all collections
+const collectionKeys = getCollectionKeys()
+const allCollections = await Promise.all(
+  collectionKeys.map(async (key) => {
+    const posts = await getCollection(key as any)
+    return posts
+      .filter((post: any) => !post.id.startsWith('_'))
+      .map((post: any) => ({
+        ...post,
+        collection: key
+      }))
+  })
+)
+
+// Also get guide posts
+const guidePosts = await getCollection('posts')
+const filteredGuidePosts = guidePosts
+  .filter((post) => !post.id.startsWith('_'))
+  .map((post: any) => ({
+    ...post,
+    collection: 'posts'
+  }))
+
+// Combine all posts
+const allPosts = [...allCollections.flat(), ...filteredGuidePosts]
+
+// Group by year and month
+interface PostsByDate {
+  [year: string]: {
+    [month: string]: Array<{
+      title: string
+      slug: string
+      date: Date
+      collection: string
+    }>
+  }
+}
+
+const postsByDate: PostsByDate = {}
+
+allPosts.forEach((post: any) => {
+  const date = new Date(post.data.pubDate)
+  const year = date.getFullYear().toString()
+  const month = date.toLocaleString('en-US', { month: 'long' })
+
+  if (!postsByDate[year]) {
+    postsByDate[year] = {}
+  }
+  if (!postsByDate[year][month]) {
+    postsByDate[year][month] = []
+  }
+
+  const slug =
+    post.collection === 'posts' ? `/${post.id}/` : `/collections/${post.collection}/${post.id}/`
+
+  postsByDate[year][month].push({
+    title: post.data.title,
+    slug,
+    date,
+    collection: post.collection
+  })
+})
+
+// Sort years descending, months by date
+const sortedYears = Object.keys(postsByDate).sort((a, b) => parseInt(b) - parseInt(a))
+
+const monthOrder = [
+  'January',
+  'February',
+  'March',
+  'April',
+  'May',
+  'June',
+  'July',
+  'August',
+  'September',
+  'October',
+  'November',
+  'December'
+]
+
+// Build breadcrumbs
+const breadcrumbs: BreadcrumbItem[] = [{ label: 'Home', href: '/' }, { label: 'Archive' }]
+
+// Count total posts
+const totalPosts = allPosts.length
+---
+
+<IndexLayout
+  title="Archive - "
+  +
+  themeConfig.site.title
+  description="Browse all posts by date"
+  pageTitle="Archive"
+>
+  <main>
+    <Breadcrumbs items={breadcrumbs} />
+
+    <p class="total">{totalPosts} posts</p>
+
+    <div class="timeline">
+      {
+        sortedYears.map((year) => {
+          const months = Object.keys(postsByDate[year]).sort(
+            (a, b) => monthOrder.indexOf(b) - monthOrder.indexOf(a)
+          )
+
+          return (
+            <div class="year-group">
+              <h2 class="year">{year}</h2>
+
+              {months.map((month) => {
+                const posts = postsByDate[year][month].sort(
+                  (a, b) => b.date.getTime() - a.date.getTime()
+                )
+
+                return (
+                  <div class="month-group">
+                    <h3 class="month">{month}</h3>
+
+                    <ul class="posts">
+                      {posts.map((post) => {
+                        const day = post.date.getDate().toString().padStart(2, '0')
+                        return (
+                          <li>
+                            <a href={post.slug}>
+                              <span class="day">{day}</span>
+                              <span class="title">{post.title}</span>
+                            </a>
+                          </li>
+                        )
+                      })}
+                    </ul>
+                  </div>
+                )
+              })}
+            </div>
+          )
+        })
+      }
+    </div>
+  </main>
+</IndexLayout>
+
+<style>
+  .total {
+    color: var(--text-secondary);
+    opacity: 0.75;
+    font-size: 0.875rem;
+    margin: 0 0 2rem 0;
+  }
+
+  .timeline {
+    display: flex;
+    flex-direction: column;
+    gap: 2.5rem;
+  }
+
+  .year-group {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+
+  .year {
+    font-size: 1.25rem;
+    font-weight: 500;
+    margin: 0 0 0.5rem 0;
+    color: var(--text-primary);
+    opacity: 0.9;
+  }
+
+  .month-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .month {
+    font-size: 0.875rem;
+    font-weight: 500;
+    margin: 0;
+    color: var(--text-secondary);
+    opacity: 0.75;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+
+  .posts {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .posts a {
+    text-decoration: none;
+    color: var(--text-primary);
+    transition: opacity 0.15s ease-out;
+    display: flex;
+    align-items: baseline;
+    gap: 1rem;
+  }
+
+  .posts a:hover {
+    opacity: 0.6;
+  }
+
+  .day {
+    color: var(--text-secondary);
+    opacity: 0.6;
+    font-size: 0.875rem;
+    font-variant-numeric: tabular-nums;
+    flex-shrink: 0;
+    width: 1.5rem;
+  }
+
+  .title {
+    flex: 1;
+  }
+
+  @media (max-width: 768px) {
+    .timeline {
+      gap: 2rem;
+    }
+
+    .year {
+      font-size: 1.125rem;
+    }
+  }
+</style>

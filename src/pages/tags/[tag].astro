@@ -1,0 +1,232 @@
+---
+import IndexLayout from '@/layouts/IndexLayout.astro'
+import Breadcrumbs from '@/components/ui/Breadcrumbs.astro'
+import type { BreadcrumbItem } from '@/components/ui/Breadcrumbs.astro'
+import { themeConfig } from '@/config'
+import { getCollection } from 'astro:content'
+import { getCollectionKeys } from '@/collections.config'
+
+export async function getStaticPaths() {
+  // Get all posts from all collections
+  const collectionKeys = getCollectionKeys()
+  const allCollections = await Promise.all(
+    collectionKeys.map(async (key) => {
+      const posts = await getCollection(key as any)
+      return posts
+        .filter((post: any) => !post.id.startsWith('_'))
+        .map((post: any) => ({ ...post, collection: key }))
+    })
+  )
+
+  // Also get guide posts
+  const guidePosts = await getCollection('posts')
+  const filteredGuidePosts = guidePosts
+    .filter((post) => !post.id.startsWith('_'))
+    .map((post: any) => ({ ...post, collection: 'posts' }))
+
+  // Combine all posts
+  const allPosts = [...allCollections.flat(), ...filteredGuidePosts]
+
+  // Get all unique tags
+  const tags = new Set<string>()
+  allPosts.forEach((post: any) => {
+    const postTags = post.data.tags || []
+    postTags.forEach((tag: string) => tags.add(tag))
+  })
+
+  // Generate paths for each tag
+  return Array.from(tags).map((tag) => ({
+    params: { tag },
+    props: {
+      tag,
+      posts: allPosts.filter((post: any) => 
+        (post.data.tags || []).includes(tag)
+      )
+    }
+  }))
+}
+
+const { tag, posts } = Astro.props
+
+// Sort posts by date (newest first)
+const sortedPosts = posts.sort(
+  (a: any, b: any) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
+)
+
+// Build breadcrumbs
+const breadcrumbs: BreadcrumbItem[] = [
+  { label: 'Home', href: '/' },
+  { label: 'Tags', href: '/tags/' },
+  { label: tag }
+]
+---
+
+<IndexLayout
+  title={`${tag} - Tags - ${themeConfig.site.title}`}
+  description={`Posts tagged with ${tag}`}
+  pageTitle={`Tag: ${tag}`}
+>
+  <main>
+    <Breadcrumbs items={breadcrumbs} />
+    
+    <p class="total">{sortedPosts.length} {sortedPosts.length === 1 ? 'post' : 'posts'}</p>
+
+    <ul class="post-list">
+      {sortedPosts.map((post: any) => {
+        const slug = post.collection === 'posts' 
+          ? `/${post.id}/` 
+          : `/collections/${post.collection}/${post.id}/`
+        
+        const date = new Date(post.data.pubDate)
+        const formattedDate = date.toLocaleDateString('en-US', {
+          year: 'numeric',
+          month: 'short',
+          day: 'numeric'
+        })
+
+        return (
+          <li>
+            <a href={slug}>
+              <div class={`post-item ${!themeConfig.date.dateOnRight ? 'date-left' : ''}`}>
+                {!themeConfig.date.dateOnRight && (
+                  <p class="date font-features">{formattedDate}</p>
+                )}
+                <p class="title">{post.data.title}</p>
+                {themeConfig.date.dateOnRight && (
+                  <div class={themeConfig.general.postListDottedDivider ? 'dotted-divider' : 'divider'} />
+                )}
+                {themeConfig.date.dateOnRight && (
+                  <p class="date font-features">{formattedDate}</p>
+                )}
+              </div>
+            </a>
+          </li>
+        )
+      })}
+    </ul>
+    <div class="placeholder"></div>
+  </main>
+</IndexLayout>
+
+<style>
+  .total {
+    color: var(--text-secondary);
+    opacity: 0.75;
+    font-size: 0.875rem;
+    margin: 0 0 2rem 0;
+  }
+
+  .post-list {
+    padding: 0;
+    margin: 0;
+    list-style-type: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .post-list li {
+    list-style: none;
+  }
+
+  .post-list li::marker {
+    display: none;
+  }
+
+  a {
+    color: var(--text-primary);
+    display: block;
+    text-decoration: none;
+    transition: opacity 0.15s ease-out;
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .post-list:hover a {
+      opacity: 0.4;
+    }
+
+    .post-list:hover a:hover {
+      opacity: 1;
+    }
+
+    .post-list:hover a:hover .divider {
+      background-color: var(--text-tertiary);
+      opacity: 0.75;
+    }
+    .post-list:hover a:hover .dotted-divider {
+      color: var(--text-secondary);
+    }
+    .post-list:hover a:hover .date {
+      color: var(--text-secondary);
+      opacity: 1;
+    }
+  }
+
+  .post-item {
+    height: 2.75rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .post-item.date-left {
+    justify-content: flex-start;
+  }
+
+  .post-item.date-left .title {
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+
+  .post-item.date-left .date {
+    margin-right: 0.75rem;
+  }
+
+  .title {
+    margin: 0;
+    flex-shrink: 1;
+    min-width: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .date {
+    margin: 0;
+    color: var(--text-secondary);
+    opacity: 0.75;
+    letter-spacing: var(--spacing-s);
+    flex-shrink: 0;
+    white-space: nowrap;
+  }
+
+  .divider {
+    flex: 1 1 auto;
+    min-width: 3rem;
+    margin: 0 0.25rem;
+    height: 0.5px;
+    background-color: var(--border);
+  }
+
+  .dotted-divider {
+    flex: 1 1 3rem;
+    min-width: 3rem;
+    max-width: 100%;
+    text-align: end;
+    letter-spacing: 5px;
+    height: 1.675rem;
+    overflow: hidden;
+    color: var(--text-tertiary);
+    opacity: 0.75;
+  }
+
+  .dotted-divider::after {
+    content: '·····························································································································································';
+    pointer-events: none;
+  }
+
+  .placeholder {
+    height: 3rem;
+  }
+</style>

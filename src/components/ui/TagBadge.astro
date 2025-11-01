@@ -1,0 +1,48 @@
+---
+interface Props {
+  tag: string
+  clickable?: boolean
+}
+
+const { tag, clickable = true } = Astro.props
+---
+
+{clickable ? (
+  <a href={`/tags/${tag}/`} class="tag-badge">
+    {tag}
+  </a>
+) : (
+  <span class="tag-badge">
+    {tag}
+  </span>
+)}
+
+<style>
+  .tag-badge {
+    display: inline-block;
+    padding: 0.125rem 0.5rem;
+    font-size: 0.75rem;
+    font-family: var(--sans);
+    letter-spacing: 0.02em;
+    color: var(--text-secondary);
+    background-color: var(--bg-secondary);
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    text-decoration: none;
+    transition: all 0.15s ease-out;
+    white-space: nowrap;
+  }
+
+  a.tag-badge:hover {
+    color: var(--text-primary);
+    border-color: var(--text-tertiary);
+    background-color: var(--bg-tertiary);
+  }
+
+  @media (max-width: 768px) {
+    .tag-badge {
+      font-size: 0.7rem;
+      padding: 0.1rem 0.4rem;
+    }
+  }
+</style>
