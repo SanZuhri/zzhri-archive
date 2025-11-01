@@ -1,6 +1,6 @@
 ---
 title: 'Understanding Black Holes'
-pubDate: 2024-10-15
+pubDate: 2025-10-15
 ---
 
 Black holes are among the most fascinating objects in the universe. They are regions of spacetime where gravity is so strong that nothing, not even light, can escape from them.

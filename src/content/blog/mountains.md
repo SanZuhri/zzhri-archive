@@ -1,6 +1,6 @@
 ---
 title: 'The Highest Mountains on Earth'
-pubDate: 2024-10-10
+pubDate: 2025-10-10
 ---
 
 Mountains have always captured human imagination. They represent challenges to overcome and natural beauty to admire.

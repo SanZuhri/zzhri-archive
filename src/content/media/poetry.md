@@ -1,6 +1,6 @@
 ---
 title: 'The Power of Poetry'
-pubDate: 2024-09-15
+pubDate: 2025-10-18
 ---
 
 Poetry is one of the oldest forms of literary expression, using rhythm, metaphor, and imagery to convey deep emotions and ideas.

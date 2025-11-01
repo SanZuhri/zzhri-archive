@@ -1,6 +1,6 @@
 ---
 title: 'Welcome to Archive'
-pubDate: 2024-10-31
+pubDate: 2025-10-31
 ---
 
 Welcome to **Archive** - a minimal collection and archive system built with Astro and the Chiri theme.

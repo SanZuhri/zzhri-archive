@@ -1,6 +1,6 @@
 ---
 title: 'Customizing Your Archive'
-pubDate: 2024-10-28
+pubDate: 2025-10-30
 ---
 
 Learn how to customize your Archive to match your preferences and needs.

@@ -1,6 +1,6 @@
 ---
 title: 'The World Oceans'
-pubDate: 2024-08-25
+pubDate: 2025-10-25
 ---
 
 Oceans cover about 71% of Earth's surface and contain 97% of Earth's water. They play a crucial role in regulating our planet's climate.

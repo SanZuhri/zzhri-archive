@@ -1,6 +1,6 @@
 ---
 title: 'Classic Novels Everyone Should Read'
-pubDate: 2024-10-01
+pubDate: 2025-10-13
 ---
 
 Classic literature has shaped our understanding of storytelling and continues to influence modern writers.
