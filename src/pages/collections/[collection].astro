@@ -36,7 +36,7 @@ const collectionMeta: Record<string, { title: string; description: string }> = {
 }
 
 const meta = collectionMeta[collection]
-const posts = await getCollection(collection as 'gallery' | 'thoughts' | 'projects' | 'media')
+const posts = await getCollection(collection as 'thoughts' | 'media')
 const filteredPosts = posts
   .filter((post: any) => !post.id.startsWith('_'))
   .sort((a: any, b: any) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())

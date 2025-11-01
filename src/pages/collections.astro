@@ -6,19 +6,9 @@ import { getCollection } from 'astro:content'
 // Define collections with metadata
 const collections = [
   {
-    name: 'gallery',
-    title: 'Gallery',
-    description: 'Photos & visuals'
-  },
-  {
     name: 'thoughts',
     title: 'Thoughts',
     description: 'Reflections & ideas'
-  },
-  {
-    name: 'projects',
-    title: 'Projects',
-    description: 'Work & creativity'
   },
   {
     name: 'media',
@@ -30,7 +20,7 @@ const collections = [
 // Hitung jumlah posts di setiap collection
 const collectionsWithCount = await Promise.all(
   collections.map(async (col) => {
-    const posts = await getCollection(col.name as 'gallery' | 'thoughts' | 'projects' | 'media')
+    const posts = await getCollection(col.name as 'thoughts' | 'media')
     const filteredPosts = posts.filter((post: any) => !post.id.startsWith('_'))
     return {
       ...col,

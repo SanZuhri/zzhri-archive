@@ -15,18 +15,15 @@ const posts = defineCollection({
   schema: () => postSchema
 })
 
-const gallery = defineCollection({
-  loader: glob({ base: './src/content/gallery', pattern: '**/*.{md,mdx}' }),
-  schema: () => postSchema
+const about = defineCollection({
+  // Load Markdown files in the `src/content/about/` directory.
+  loader: glob({ base: './src/content/about', pattern: '**/*.md' }),
+  // Type-check frontmatter using a schema
+  schema: z.object({})
 })
 
 const thoughts = defineCollection({
   loader: glob({ base: './src/content/thoughts', pattern: '**/*.{md,mdx}' }),
-  schema: () => postSchema
-})
-
-const projects = defineCollection({
-  loader: glob({ base: './src/content/projects', pattern: '**/*.{md,mdx}' }),
   schema: () => postSchema
 })
 
@@ -35,11 +32,14 @@ const media = defineCollection({
   schema: () => postSchema
 })
 
-const about = defineCollection({
-  // Load Markdown files in the `src/content/about/` directory.
-  loader: glob({ base: './src/content/about', pattern: '**/*.md' }),
-  // Type-check frontmatter using a schema
-  schema: z.object({})
+const gallery = defineCollection({
+  loader: glob({ base: './src/content/gallery', pattern: '**/*.{md,mdx}' }),
+  schema: () => postSchema
 })
 
-export const collections = { posts, gallery, thoughts, projects, media, about }
+const projects = defineCollection({
+  loader: glob({ base: './src/content/projects', pattern: '**/*.{md,mdx}' }),
+  schema: () => postSchema
+})
+
+export const collections = { posts, about, thoughts, media, gallery, projects }
