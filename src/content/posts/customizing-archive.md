@@ -1,6 +1,7 @@
 ---
 title: 'Customizing Your Archive'
 pubDate: 2025-10-28
+tags: ['guide', 'customization', 'configuration']
 ---
 
 Want to make this archive yours? Here's what you can change.

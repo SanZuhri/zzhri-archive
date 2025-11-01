@@ -1,5 +1,6 @@
 ---
 import { getCollection } from 'astro:content'
+import type { CollectionKey } from '@/collections.config'
 
 interface Props {
   collection: string
@@ -9,7 +10,7 @@ interface Props {
 const { collection, currentSlug } = Astro.props
 
 // Get all posts in the collection
-const posts = await getCollection(collection as 'posts' | 'astronomy' | 'geography' | 'literature' | 'movie')
+const posts = await getCollection(collection as CollectionKey | 'posts')
 const sortedPosts = posts
   .filter((post) => !post.id.startsWith('_'))
   .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
@@ -22,28 +23,44 @@ const prevPost = currentIndex > 0 ? sortedPosts[currentIndex - 1] : null
 const nextPost = currentIndex < sortedPosts.length - 1 ? sortedPosts[currentIndex + 1] : null
 
 // Generate URLs
-const prevUrl = prevPost ? (collection === 'posts' ? `/${prevPost.id}/` : `/collections/${collection}/${prevPost.id}/`) : null
-const nextUrl = nextPost ? (collection === 'posts' ? `/${nextPost.id}/` : `/collections/${collection}/${nextPost.id}/`) : null
+const prevUrl = prevPost
+  ? collection === 'posts'
+    ? `/${prevPost.id}/`
+    : `/collections/${collection}/${prevPost.id}/`
+  : null
+const nextUrl = nextPost
+  ? collection === 'posts'
+    ? `/${nextPost.id}/`
+    : `/collections/${collection}/${nextPost.id}/`
+  : null
 ---
 
 <div class="post-navigation">
-  {prevPost && (
-    <a href={prevUrl} class="nav-link prev-link" aria-label={`Previous post: ${prevPost.data.title}`}>
-      <span class="nav-arrow">←</span>
-      <span class="nav-title">{prevPost.data.title}</span>
-    </a>
-  )}
+  {
+    prevPost && (
+      <a
+        href={prevUrl}
+        class="nav-link prev-link"
+        aria-label={`Previous post: ${prevPost.data.title}`}
+      >
+        <span class="nav-arrow">←</span>
+        <span class="nav-title">{prevPost.data.title}</span>
+      </a>
+    )
+  }
 
   <div class="nav-utilities">
     <slot />
   </div>
 
-  {nextPost && (
-    <a href={nextUrl} class="nav-link next-link" aria-label={`Next post: ${nextPost.data.title}`}>
-      <span class="nav-title">{nextPost.data.title}</span>
-      <span class="nav-arrow">→</span>
-    </a>
-  )}
+  {
+    nextPost && (
+      <a href={nextUrl} class="nav-link next-link" aria-label={`Next post: ${nextPost.data.title}`}>
+        <span class="nav-title">{nextPost.data.title}</span>
+        <span class="nav-arrow">→</span>
+      </a>
+    )
+  }
 </div>
 
 <style>

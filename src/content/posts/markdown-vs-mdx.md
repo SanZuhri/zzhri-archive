@@ -1,6 +1,7 @@
 ---
 title: 'Markdown vs MDX: A Comprehensive Guide'
 pubDate: 2025-10-27
+tags: ['guide', 'markdown', 'mdx', 'tutorial']
 ---
 
 Understanding the difference between Markdown (.md) and MDX (.mdx) is essential for choosing the right format for your content. This guide covers everything you need to know.

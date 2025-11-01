@@ -1,6 +1,7 @@
 ---
 title: 'Welcome to Archive'
 pubDate: 2025-10-31
+tags: ['guide', 'getting-started', 'introduction']
 ---
 
 Hey there! Welcome to **Archive**.
