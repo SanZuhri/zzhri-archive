@@ -133,33 +133,56 @@ const nextUrl = nextPost
 
   @media (max-width: 600px) {
     .post-navigation {
-      display: flex;
-      justify-content: space-between;
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
       align-items: center;
       gap: 0.5rem;
-      padding: 0.5rem;
-      background: var(--bg-secondary);
-      border-radius: var(--radius);
+      padding: 0;
+      background: transparent;
+      border: none;
+      border-radius: 0;
+      margin-top: 2rem;
+      padding-top: 1.5rem;
+    }
+
+    .prev-link {
+      grid-column: 1;
+      justify-self: start;
     }
 
     .nav-utilities {
+      grid-column: 2;
       display: flex;
       gap: 0.5rem;
     }
 
+    .next-link {
+      grid-column: 3;
+      justify-self: end;
+    }
+
     .nav-link {
-      width: 36px;
-      height: 36px;
+      width: auto;
+      height: auto;
       display: flex;
       align-items: center;
       justify-content: center;
-      background: var(--bg-primary);
-      border-radius: 50%;
-      transition: transform 0.2s ease;
+      background: transparent;
+      border: none;
+      border-radius: 0;
+      color: var(--text-primary);
+      padding: 0.5rem;
+      transition: opacity 0.2s ease;
+    }
+
+    .nav-link:hover {
+      opacity: 0.6;
+      background: transparent;
     }
 
     .nav-link:active {
-      transform: scale(0.95);
+      transform: scale(0.92);
+      opacity: 0.4;
     }
 
     .nav-title {
@@ -167,8 +190,9 @@ const nextUrl = nextPost
     }
 
     .nav-arrow {
-      font-size: 1rem;
+      font-size: 1.25rem;
       line-height: 1;
+      font-weight: 400;
     }
   }
 </style>

@@ -6,6 +6,7 @@ import Footer from '@/components/layout/Footer.astro'
 import BaseLayout from '@/layouts/BaseLayout.astro'
 import GradientMask from '@/components/ui/GradientMask.astro'
 import NavigationSidebar from '@/components/ui/NavigationSidebar.astro'
+import MobileBottomNav from '@/components/ui/MobileBottomNav.astro'
 import { themeConfig } from '@/config'
 
 interface Props {
@@ -36,6 +37,7 @@ const { title, description, pageTitle } = Astro.props
       )
     }
   </div>
+  <MobileBottomNav />
 </BaseLayout>
 
 <style is:global>

@@ -17,6 +17,8 @@
     let isVisible = false
 
     function toggleVisibility() {
+      if (!button) return
+      
       const shouldShow = window.scrollY > 200
       if (shouldShow !== isVisible) {
         isVisible = shouldShow
@@ -93,7 +95,7 @@
 
   @media (max-width: 768px) {
     .back-to-top {
-      bottom: 1.5rem;
+      bottom: calc(5.5rem + env(safe-area-inset-bottom));
       right: 1.5rem;
       width: 2.5rem;
       height: 2.5rem;

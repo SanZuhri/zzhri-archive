@@ -22,6 +22,7 @@ import ReadingProgress from '@/components/ui/ReadingProgress.astro'
 import ThemeToggle from '@/components/ui/ThemeToggle.astro'
 import XPOST from '@/components/ui/XPOST.astro'
 import TagBadge from '@/components/ui/TagBadge.astro'
+import MobileBottomNav from '@/components/ui/MobileBottomNav.astro'
 import BaseLayout from '@/layouts/BaseLayout.astro'
 
 import { themeConfig } from '@/config'
@@ -108,6 +109,7 @@ if (backUrl !== '/') {
     {themeConfig.post.linkCard && <LinkCard />}
     {themeConfig.general.footer && <Footer />}
   </div>
+  <MobileBottomNav />
 </BaseLayout>
 
 <style>
