@@ -1,95 +1,41 @@
 ---
 import IndexLayout from '@/layouts/IndexLayout.astro'
 import { themeConfig } from '@/config'
-import { getCollection } from 'astro:content'
-import { getCollections } from '@/collections.config'
-
-// Get collection stats
-const collections = getCollections()
-const collectionsWithStats = await Promise.all(
-  collections.map(async (col) => {
-    const posts = await getCollection(col.key as any)
-    const filteredPosts = posts.filter((post: any) => !post.id.startsWith('_'))
-    const sortedPosts = filteredPosts.sort(
-      (a: any, b: any) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
-    )
-
-    const lastPost = sortedPosts[0] as any
-    const lastUpdated = lastPost?.data?.pubDate || null
-
-    return {
-      ...col,
-      count: filteredPosts.length,
-      lastUpdated
-    }
-  })
-)
-
-// Calculate total posts
-const totalPosts = collectionsWithStats.reduce((sum, col) => sum + col.count, 0)
-
-// Get relative time
-function getRelativeTime(date: Date | null) {
-  if (!date) return 'Never'
-
-  const now = new Date()
-  const diff = now.getTime() - date.getTime()
-  const days = Math.floor(diff / (1000 * 60 * 60 * 24))
-
-  if (days === 0) return 'Today'
-  if (days === 1) return 'Yesterday'
-  if (days < 7) return `${days} days ago`
-  if (days < 30) return `${Math.floor(days / 7)} weeks ago`
-  if (days < 365) return `${Math.floor(days / 30)} months ago`
-  return `${Math.floor(days / 365)} years ago`
-}
 ---
 
 <IndexLayout title={themeConfig.site.title} description={themeConfig.site.description}>
-  <main>
-    <div class="intro">
-      <h1>{themeConfig.site.author}</h1>
+  <main id="main-content">
+    <article class="intro">
+      <!-- <h1>{themeConfig.site.author}</h1> -->
 
-      <p class="bio">
-        Personal archive of thoughts, ideas, and knowledge.
-        {totalPosts} posts across {collectionsWithStats.length} collections.
-      </p>
+      <h2></h2>
 
-      <nav class="main-nav">
-        <h2 class="nav-heading">Collections</h2>
-        <ul class="nav-list">
-          {
-            collectionsWithStats.map((col) => (
-              <li>
-                <a href={col.listPage} class="nav-link">
-                  <span class="nav-title">{col.title}</span>
-                  <span class="nav-count">{col.count}</span>
-                </a>
-              </li>
-            ))
-          }
-        </ul>
+      <div class="content">
+        <p>
+          I'm trying to get better at writing. Not for anyone else, just for me. To organize thoughts that usually just bounce around in my head. To process emotions I don't always know how to handle. To learn by putting things into words.
+        </p>
 
-        <h2 class="nav-heading">More</h2>
-        <ul class="nav-list">
-          <li>
-            <a href="/tags/" class="nav-link">
-              <span class="nav-title">Tags</span>
-            </a>
-          </li>
-          <li>
-            <a href="/archive/" class="nav-link">
-              <span class="nav-title">Archive</span>
-            </a>
-          </li>
-          <li>
-            <a href="/guide/" class="nav-link">
-              <span class="nav-title">Guide</span>
-            </a>
-          </li>
-        </ul>
-      </nav>
-    </div>
+        <p>
+          Sometimes I write about things I'm learning. Sometimes it's just feelings I need to get out. Books I've read. Movies that stuck with me. Ideas that won't leave me alone. It's messy and unfiltered, which is kind of the point.
+        </p>
+
+        <p>
+          Writing forces clarity. When something's just in your head, it can stay vague forever. But when you have to write it down? You realize what you actually think. What you don't understand yet. What matters and what's just noise.
+        </p>
+
+        <p>
+          This is my practice space. Some pieces are thought through, others are rough and half-formed. I'm publishing them anyway because perfectionism is a trap. Better to share something real than wait forever for something perfect.
+        </p>
+
+        <p>
+          If you're here, maybe you found something useful. Maybe not. Either way is fine. I'm doing this for myself first, to think clearer, write better, understand more. If it helps someone else along the way, that's a bonus.
+        </p>
+
+        <p class="closing">
+          <a href="/collections/">Collections</a> · <a href="/archive/">Archive</a> · <a href="/tags/">Tags</a>
+        </p>
+      </div>
+    </article>
   </main>
 </IndexLayout>
 
@@ -99,107 +45,64 @@ function getRelativeTime(date: Date | null) {
   }
 
   h1 {
-    font-size: 1.5rem;
+    font-size: 1.75rem;
     font-weight: 600;
-    margin: 0 0 0.5rem 0;
+    margin: 0 0 2rem 0;
+    color: var(--text-primary);
+    letter-spacing: -0.02em;
+  }
+
+  .content {
+    font-family: var(--serif);
+    font-size: var(--font-size-l);
+    line-height: 1.75;
     color: var(--text-primary);
   }
 
-  .bio {
-    margin: 0 0 2.5rem 0;
+  .content p {
+    margin: 0 0 1.5em 0;
+  }
+
+  .content p:last-child {
+    margin-bottom: 0;
+  }
+
+  .content em {
+    font-style: italic;
+  }
+
+  .content a {
+    color: var(--text-primary);
+    text-decoration: underline;
+    text-decoration-color: var(--text-tertiary);
+    text-underline-offset: 2px;
+    transition: text-decoration-color 0.15s ease-out;
+  }
+
+  .content a:hover {
+    text-decoration-color: var(--text-primary);
+  }
+
+  .closing {
+    margin-top: 2.5em;
+    padding-top: 2em;
+    border-top: 1px solid var(--border);
     color: var(--text-secondary);
-    opacity: 0.75;
-    line-height: 1.6;
   }
 
-  /* Main Navigation */
-  .main-nav {
-    display: flex;
-    flex-direction: column;
-    gap: 2rem;
-  }
-
-  .nav-heading {
-    font-size: 0.875rem;
-    font-weight: 500;
-    margin: 0 0 0.5rem 0;
-    color: var(--text-primary);
-    opacity: 0.9;
-  }
-
-  .nav-list {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-  }
-
-  .nav-list li {
-    position: relative;
-  }
-
-  .nav-link {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0.5rem 0;
-    text-decoration: none;
-    color: var(--text-primary);
-    transition: opacity 0.15s ease-out;
-    border: none;
-    outline: none;
-  }
-
-  .nav-link::before,
-  .nav-link::after {
-    display: none !important;
-  }
-
-  .nav-link:hover,
-  .nav-link:focus {
-    text-decoration: none;
-    border: none;
-  }
-
-  @media (hover: hover) and (pointer: fine) {
-    .nav-list:hover .nav-link {
-      opacity: 0.4;
-    }
-
-    .nav-list:hover .nav-link:hover {
-      opacity: 1;
-    }
-  }
-
-  .nav-title {
-    font-size: 1.125rem;
-    font-weight: 400;
-    line-height: 1.5;
-  }
-
-  .nav-count {
-    font-size: 0.875rem;
-    color: var(--text-secondary);
-    opacity: 0.75;
-    font-variant-numeric: tabular-nums;
-    letter-spacing: var(--spacing-s);
-  }
-
-  /* Responsive */
   @media (max-width: 768px) {
     h1 {
-      font-size: 1.375rem;
+      font-size: 1.5rem;
+      margin-bottom: 1.5rem;
     }
 
-    .bio {
-      font-size: 0.9375rem;
-      margin-bottom: 2rem;
+    .content {
+      font-size: var(--font-size-m);
     }
 
-    .main-nav {
-      gap: 1.75rem;
+    .closing {
+      margin-top: 2em;
+      padding-top: 1.5em;
     }
   }
 </style>

@@ -3,31 +3,41 @@ import { themeConfig } from '@/config'
 import type { TOCProps } from '@/types'
 
 const { toc = [] }: TOCProps = Astro.props
+
+// Filter: Only show H2 (level 2) for cleaner TOC
+const filteredToc = toc.filter((item) => item.level === 2)
+
+// Show TOC if there are H2 items
+const shouldShowToc = filteredToc.length > 0
 ---
 
-<div class="toc-container" id="toc">
-  <nav class="toc-nav">
-    <ul class="toc-list" id="toc-list">
-      <!-- Back to top link -->
-      <li class="toc-item toc-level-0">
-        <a href="#" class="toc-link toc-title" title="Back to top" data-text="Back to top">
-          Back to top
-        </a>
-      </li>
-
-      <!-- TOC items -->
-      {
-        toc.map((item) => (
-          <li class={`toc-item toc-level-${item.level}`}>
-            <a href={`#${item.id}`} class="toc-link" title={item.text} data-text={item.text}>
-              {item.text}
+{shouldShowToc && (
+  <div class="toc-container" id="toc">
+    <nav class="toc-nav">
+      <div class="toc-scroll">
+        <ul class="toc-list" id="toc-list">
+          <!-- Back to top link -->
+          <li class="toc-item toc-level-0">
+            <a href="#" class="toc-link toc-title" title="Back to top" data-text="Back to top">
+              Back to top
             </a>
           </li>
-        ))
-      }
-    </ul>
-  </nav>
-</div>
+
+          <!-- TOC items (H2 only) -->
+          {
+            filteredToc.map((item) => (
+              <li class={`toc-item toc-level-${item.level}`}>
+                <a href={`#${item.id}`} class="toc-link" title={item.text} data-text={item.text}>
+                  {item.text}
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </nav>
+  </div>
+)}
 
 <script
   is:inline
@@ -269,6 +279,31 @@ const { toc = [] }: TOCProps = Astro.props
 
   .toc-nav {
     font-family: var(--sans);
+  }
+
+  .toc-scroll {
+    max-height: calc(100vh - 14rem);
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding-right: 0.5rem;
+  }
+
+  /* Minimal scrollbar */
+  .toc-scroll::-webkit-scrollbar {
+    width: 3px;
+  }
+
+  .toc-scroll::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .toc-scroll::-webkit-scrollbar-thumb {
+    background: var(--border);
+    border-radius: 2px;
+  }
+
+  .toc-scroll::-webkit-scrollbar-thumb:hover {
+    background: var(--text-tertiary);
   }
 
   .toc-list,

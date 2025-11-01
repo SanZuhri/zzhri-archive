@@ -4,7 +4,7 @@ export const themeConfig: ThemeConfig = {
   // SITE INFO ///////////////////////////////////////////////////////////////////////////////////////////
   site: {
     website: 'https://astro-chiri.netlify.app/', // Site domain
-    title: 'Archive', // Site title
+    title: 'Thinking Out Loud', // Site title
     author: 'Zzhri', // Author name
     description: 'Minimal blog built by Astro', // Site description
     language: 'en-US' // Default language

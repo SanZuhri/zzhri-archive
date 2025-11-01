@@ -1,13 +1,4 @@
 export const CONTENT_STRUCTURE = {
-  posts: {
-    type: 'guide' as const,
-    title: 'Guide',
-    description: 'Guides and documentation',
-    urlPattern: '/{slug}',
-    listPage: '/guide/',
-    backLabel: 'guide',
-    showInCollectionsList: false
-  },
 
   thoughts: {
     type: 'collection' as const,
@@ -51,11 +42,21 @@ export const CONTENT_STRUCTURE = {
 
   blog: {
     type: 'collection' as const,
-    title: 'Blog',
+    title: 'Writing',
     description: 'Blog posts',
     urlPattern: '/collections/blog/{slug}',
     listPage: '/collections/blog/',
     backLabel: 'blog',
+    showInCollectionsList: true
+  },
+
+  posts: {
+    type: 'collection' as const,
+    title: 'Guide',
+    description: 'Guides and documentation',
+    urlPattern: '/collections/posts/{slug}',
+    listPage: '/collections/posts/',
+    backLabel: 'posts',
     showInCollectionsList: true
   },
 

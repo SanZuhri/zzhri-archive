@@ -6,7 +6,7 @@ import { themeConfig } from '@/config'
 import { getCollection } from 'astro:content'
 import { getCollectionKeys } from '@/collections.config'
 
-// Get all posts from all collections
+// Get all posts from all collections (including posts/guide)
 const collectionKeys = getCollectionKeys()
 const allCollections = await Promise.all(
   collectionKeys.map(async (key) => {
@@ -20,17 +20,8 @@ const allCollections = await Promise.all(
   })
 )
 
-// Also get guide posts
-const guidePosts = await getCollection('posts')
-const filteredGuidePosts = guidePosts
-  .filter((post) => !post.id.startsWith('_'))
-  .map((post: any) => ({
-    ...post,
-    collection: 'posts'
-  }))
-
 // Combine all posts
-const allPosts = [...allCollections.flat(), ...filteredGuidePosts]
+const allPosts = allCollections.flat()
 
 // Group by year and month
 interface PostsByDate {
@@ -58,8 +49,7 @@ allPosts.forEach((post: any) => {
     postsByDate[year][month] = []
   }
 
-  const slug =
-    post.collection === 'posts' ? `/${post.id}/` : `/collections/${post.collection}/${post.id}/`
+  const slug = `/collections/${post.collection}/${post.id}/`
 
   postsByDate[year][month].push({
     title: post.data.title,

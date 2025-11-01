@@ -1,6 +1,6 @@
 ---
 title: 'Markdown Style Guide'
-pubDate: '2025-11-02'
+pubDate: '2025-10-27'
 tags: ['guide', 'markdown', 'reference', 'syntax', 'typography']
 ---
 

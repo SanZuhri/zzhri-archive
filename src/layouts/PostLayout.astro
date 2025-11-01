@@ -13,9 +13,7 @@ import ImageViewer from '@/components/ui/ImageViewer.astro'
 import GitHubCard from '@/components/ui/GitHubCard.astro'
 import LinkCard from '@/components/ui/LinkCard.astro'
 import NeoDBCard from '@/components/ui/NeoDBCard.astro'
-import AuthorBio from '@/components/ui/AuthorBio.astro'
 import CopyCode from '@/components/ui/CopyCode.astro'
-import CopyLink from '@/components/ui/CopyLink.astro'
 import GestureNavigation from '@/components/ui/GestureNavigation.astro'
 import PostNavigation from '@/components/ui/PostNavigation.astro'
 import ReadingProgress from '@/components/ui/ReadingProgress.astro'
@@ -89,7 +87,6 @@ if (backUrl !== '/') {
               }
             </div>
             <div class="utilities">
-              <CopyLink />
               <ThemeToggle />
             </div>
           </div>
@@ -104,7 +101,6 @@ if (backUrl !== '/') {
           }
         </div>
         <slot />
-        <AuthorBio />
         <PostNavigation collection={collection} currentSlug={postSlug} />
       </div>
     </main>

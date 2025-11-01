@@ -1,23 +1,33 @@
 ---
-title: 'About Me'
+title: 'About'
 ---
 
-# Hi, I'm Zzhri 👋
+# Oh, you found this page
 
-Welcome to my corner of the internet! I'm someone who loves learning, exploring, and documenting the journey along the way.
+Most people don't click around enough to end up here. But you did. Cool.
 
-## What I Do
+## Who am I?
 
-I'm passionate about collecting knowledge and organizing it in ways that make sense to me. This archive is my digital garden - a place where I cultivate ideas, document discoveries, and share what I'm learning about the world.
+Just someone trying to figure things out. I write to think. I collect things that interest me. I'm learning as I go.
 
-Photography captures creative moments, while thoughtful reflections shape my perspective. I enjoy creative projects that bring ideas to life, and find inspiration in books, music, movies, series, and anime. Technology fascinates me as I build tools and systems to organize information better.
+I'm drawn to quiet things—books that make you pause, movies that linger, music that hits different at 2am. I like building stuff, organizing information, making sense of chaos. Photography helps me see better. Writing helps me think clearer.
 
-This space is more than just a collection of notes - it's my attempt to make sense of the world, one topic at a time. I believe in the power of organized knowledge and the beauty of connecting seemingly unrelated ideas.
+## What's this place?
 
-## Let's Connect
+It's where I keep things. Thoughts that need processing. Ideas worth remembering. Things I'm learning. Emotions I'm working through. It's messy because life is messy. It's honest because what's the point otherwise?
 
-I'm always open to interesting conversations and new perspectives. Feel free to explore my collections, and if something resonates with you, I'd love to hear about it.
+Some days I write about technical stuff. Other days it's just feelings. Sometimes it's a book that changed how I see things, or a movie that won't leave my head. No theme, no niche, no strategy. Just whatever needs to come out.
+
+## Why share it?
+
+Honestly? Mostly for me. Writing in private is fine, but there's something about publishing that makes you think harder. Makes you commit to your thoughts. Makes you accountable to your own ideas.
+
+But also—maybe someone else is figuring out the same things. Maybe something here helps. Maybe it just makes someone feel less alone in whatever they're going through. That'd be nice.
+
+## Want to talk?
+
+I'm not great at social media. I don't have a newsletter. I don't track analytics. But if something here resonated with you, or if you're working through similar things, reach out. Real conversations are rare these days. I value them.
 
 ---
 
-*This archive is built with [Astro](https://astro.build) and the [Chiri theme](https://github.com/the3ash/astro-chiri) - because even the tools we use should be thoughtful and well-designed.*
+*You made it to the end. Thanks for reading.*

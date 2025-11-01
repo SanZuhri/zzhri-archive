@@ -15,12 +15,8 @@ const allCollections = await Promise.all(
   })
 )
 
-// Also get guide posts
-const guidePosts = await getCollection('posts')
-const filteredGuidePosts = guidePosts.filter((post) => !post.id.startsWith('_'))
-
-// Combine all posts
-const allPosts = [...allCollections.flat(), ...filteredGuidePosts]
+// Combine all posts (posts/guide is now included in collectionKeys)
+const allPosts = allCollections.flat()
 
 // Count posts per tag
 const tagCounts = new Map<string, number>()

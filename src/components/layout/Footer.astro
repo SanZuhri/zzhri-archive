@@ -4,17 +4,11 @@ import { themeConfig } from '@/config'
 
 <footer>
   <div class="footer-content">
-    <div class="copyright">
-      <span class="date">
-        &copy;
-        2025
-      </span>
+    <div class="left">
       <a href="/about/">{themeConfig.site.author}</a>
     </div>
-    <div class="powered-by">
-      Powered by{' '}
-      <a href="https://astro.build">Astro</a> &{' '}
-      <a href="https://github.com/the3ash/astro-chiri">Chiri</a>
+    <div class="right">
+      <span class="year">2025</span>
     </div>
   </div>
 </footer>
@@ -32,18 +26,16 @@ import { themeConfig } from '@/config'
     display: flex;
     justify-content: space-between;
     align-items: center;
-    flex-direction: row;
-    flex-wrap: nowrap;
     width: 100%;
   }
 
-  .copyright,
-  .powered-by {
+  .left,
+  .right {
     white-space: nowrap;
   }
 
-  .copyright .date {
-    opacity: 1;
+  .year {
+    opacity: 0.6;
   }
 
   footer a {
@@ -54,5 +46,13 @@ import { themeConfig } from '@/config'
 
   footer a:hover {
     color: var(--text-primary);
+  }
+
+  @media (max-width: 768px) {
+    .footer-content {
+      flex-direction: column;
+      gap: 0.5rem;
+      align-items: flex-start;
+    }
   }
 </style>

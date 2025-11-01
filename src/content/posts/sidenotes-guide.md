@@ -1,6 +1,6 @@
 ---
 title: 'Using Sidenotes & Margin Notes'
-pubDate: 2025-11-02
+pubDate: 2025-10-27
 tags: ['guide', 'typography', 'design']
 ---
 

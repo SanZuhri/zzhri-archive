@@ -7,7 +7,7 @@ import { getCollection } from 'astro:content'
 import { getCollectionKeys } from '@/collections.config'
 
 export async function getStaticPaths() {
-  // Get all posts from all collections
+  // Get all posts from all collections (including posts/guide)
   const collectionKeys = getCollectionKeys()
   const allCollections = await Promise.all(
     collectionKeys.map(async (key) => {
@@ -18,14 +18,8 @@ export async function getStaticPaths() {
     })
   )
 
-  // Also get guide posts
-  const guidePosts = await getCollection('posts')
-  const filteredGuidePosts = guidePosts
-    .filter((post) => !post.id.startsWith('_'))
-    .map((post: any) => ({ ...post, collection: 'posts' }))
-
   // Combine all posts
-  const allPosts = [...allCollections.flat(), ...filteredGuidePosts]
+  const allPosts = allCollections.flat()
 
   // Get all unique tags
   const tags = new Set<string>()
@@ -73,9 +67,7 @@ const breadcrumbs: BreadcrumbItem[] = [
 
     <ul class="post-list">
       {sortedPosts.map((post: any) => {
-        const slug = post.collection === 'posts' 
-          ? `/${post.id}/` 
-          : `/collections/${post.collection}/${post.id}/`
+        const slug = `/collections/${post.collection}/${post.id}/`
         
         const date = new Date(post.data.pubDate)
         const formattedDate = date.toLocaleDateString('en-US', {
