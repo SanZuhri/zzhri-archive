@@ -2,28 +2,20 @@
 import IndexLayout from '@/layouts/IndexLayout.astro'
 import { themeConfig } from '@/config'
 import { getCollection } from 'astro:content'
+import { getCollections } from '@/collections.config'
 
-// Define collections with metadata
-const collections = [
-  {
-    name: 'thoughts',
-    title: 'Thoughts',
-    description: 'Reflections & ideas'
-  },
-  {
-    name: 'media',
-    title: 'Media',
-    description: 'Books, music, movies, etc'
-  },
-]
+// Get all collections from config
+const collections = getCollections()
 
-// Hitung jumlah posts di setiap collection
+// Count posts in each collection
 const collectionsWithCount = await Promise.all(
   collections.map(async (col) => {
-    const posts = await getCollection(col.name as 'thoughts' | 'media')
+    const posts = await getCollection(col.key as any)
     const filteredPosts = posts.filter((post: any) => !post.id.startsWith('_'))
     return {
-      ...col,
+      name: col.key,
+      title: col.title,
+      description: col.description,
       count: filteredPosts.length
     }
   })

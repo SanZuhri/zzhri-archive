@@ -1,5 +1,6 @@
 import { glob } from 'astro/loaders'
 import { defineCollection, z } from 'astro:content'
+import { CONTENT_STRUCTURE } from './collections.config'
 
 const postSchema = z.object({
   title: z.string(),
@@ -8,38 +9,21 @@ const postSchema = z.object({
   image: z.string().optional()
 })
 
-const posts = defineCollection({
-  // Load Markdown and MDX files in the `src/content/posts/` directory.
-  loader: glob({ base: './src/content/posts', pattern: '**/*.{md,mdx}' }),
-  // Type-check frontmatter using a schema
-  schema: () => postSchema
+const aboutSchema = z.object({})
+
+// Auto-generate collections from CONTENT_STRUCTURE
+const collections: Record<string, any> = {}
+
+Object.entries(CONTENT_STRUCTURE).forEach(([key, config]) => {
+  const schema = key === 'about' ? aboutSchema : postSchema
+
+  collections[key] = defineCollection({
+    loader: glob({
+      base: `./src/content/${key}`,
+      pattern: '**/*.{md,mdx}'
+    }),
+    schema: () => schema
+  })
 })
 
-const about = defineCollection({
-  // Load Markdown files in the `src/content/about/` directory.
-  loader: glob({ base: './src/content/about', pattern: '**/*.md' }),
-  // Type-check frontmatter using a schema
-  schema: z.object({})
-})
-
-const thoughts = defineCollection({
-  loader: glob({ base: './src/content/thoughts', pattern: '**/*.{md,mdx}' }),
-  schema: () => postSchema
-})
-
-const media = defineCollection({
-  loader: glob({ base: './src/content/media', pattern: '**/*.{md,mdx}' }),
-  schema: () => postSchema
-})
-
-const gallery = defineCollection({
-  loader: glob({ base: './src/content/gallery', pattern: '**/*.{md,mdx}' }),
-  schema: () => postSchema
-})
-
-const projects = defineCollection({
-  loader: glob({ base: './src/content/projects', pattern: '**/*.{md,mdx}' }),
-  schema: () => postSchema
-})
-
-export const collections = { posts, about, thoughts, media, gallery, projects }
+export { collections }

@@ -2,12 +2,13 @@
 import { type CollectionEntry, getCollection } from 'astro:content'
 import PostLayout from '@/layouts/PostLayout.astro'
 import { render } from 'astro:content'
+import { getCollectionKeys, getContentConfig, type CollectionKey } from '@/collections.config'
 
 export async function getStaticPaths() {
-  const collections = ['gallery', 'thoughts', 'projects', 'media'] as const
+  const collectionKeys = getCollectionKeys()
 
   const paths = await Promise.all(
-    collections.map(async (collectionName) => {
+    collectionKeys.map(async (collectionName) => {
       const posts = await getCollection(collectionName)
       return posts
         .filter((post: any) => !post.id.startsWith('_'))
@@ -30,7 +31,8 @@ type Props = {
     | CollectionEntry<'thoughts'>
     | CollectionEntry<'projects'>
     | CollectionEntry<'media'>
-  collection: string
+    | CollectionEntry<'blog'>
+  collection: CollectionKey
 }
 
 const { post, collection } = Astro.props
@@ -39,9 +41,10 @@ const { Content, remarkPluginFrontmatter } = await render(post)
 const readingTime = remarkPluginFrontmatter.readingTime
 const toc = remarkPluginFrontmatter.toc || []
 
-// Collection posts go back to their collection page
-const backUrl = `/collections/${collection}/`
-const backLabel = collection
+// Get config for this collection
+const collectionConfig = getContentConfig(collection)
+const backUrl = collectionConfig.listPage
+const backLabel = collectionConfig.backLabel
 ---
 
 <PostLayout

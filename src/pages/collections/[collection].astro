@@ -3,54 +3,37 @@ import IndexLayout from '@/layouts/IndexLayout.astro'
 import PostList from '@/components/widgets/PostList.astro'
 import { themeConfig } from '@/config'
 import { getCollection } from 'astro:content'
+import { getCollectionKeys, getContentConfig, type CollectionKey } from '@/collections.config'
 
 export async function getStaticPaths() {
-  const collections = ['gallery', 'thoughts', 'projects', 'media']
+  const collectionKeys = getCollectionKeys()
 
-  return collections.map((collection) => ({
+  return collectionKeys.map((collection) => ({
     params: { collection },
     props: { collection }
   }))
 }
 
-const { collection } = Astro.props
+const { collection } = Astro.props as { collection: CollectionKey }
 
-// Metadata untuk setiap collection
-const collectionMeta: Record<string, { title: string; description: string }> = {
-  gallery: {
-    title: 'Gallery',
-    description: 'Photos & visuals'
-  },
-  thoughts: {
-    title: 'Thoughts',
-    description: 'Reflections & ideas'
-  },
-  projects: {
-    title: 'Projects',
-    description: 'Work & creativity'
-  },
-  media: {
-    title: 'Media',
-    description: 'Books, music, movies, etc'
-  }
-}
+// Get metadata from config
+const config = getContentConfig(collection)
 
-const meta = collectionMeta[collection]
-const posts = await getCollection(collection as 'thoughts' | 'media')
+const posts = await getCollection(collection as any)
 const filteredPosts = posts
   .filter((post: any) => !post.id.startsWith('_'))
   .sort((a: any, b: any) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
 ---
 
 <IndexLayout 
-  title={meta.title + ' - ' + themeConfig.site.title} 
-  description={meta.description}
-  pageTitle={meta.title}
+  title={config.title + ' - ' + themeConfig.site.title} 
+  description={config.description}
+  pageTitle={config.title}
 >
   <main>
-    <p class="collection-description">{meta.description}</p>
+    <p class="collection-description">{config.description}</p>
     {filteredPosts.length > 0 ? (
-      <PostList posts={filteredPosts} urlPrefix={`/collections/${collection}/`} />
+      <PostList posts={filteredPosts as any} urlPrefix={`/collections/${collection}/`} />
     ) : (
       <p class="empty-message">No posts yet.</p>
     )}

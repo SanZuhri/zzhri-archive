@@ -122,20 +122,46 @@ Archive uses CSS variables for theming. You can customize colors by editing the 
 
 ## Navigation
 
-The sidebar navigation is automatically generated based on your collections. To modify it, edit:
+The navigation includes:
+- **Sidebar navigation** (desktop) - Shows Home, Collections, Guide
+- **Mobile menu** - Hamburger menu for mobile devices
 
+To modify navigation links, edit:
 ```
 src/components/ui/NavigationSidebar.astro
+src/components/ui/MobileMenu.astro
 ```
 
-## Collections Metadata
+## Collections Management
 
-Update collection titles and descriptions in:
+Collections are now managed through a **unified system**. All collection metadata is in one place:
 
+```typescript
+// src/collections.config.ts
+export const CONTENT_STRUCTURE = {
+  thoughts: {
+    type: 'collection' as const,
+    title: 'Thoughts',
+    description: 'Reflections & ideas',
+    urlPattern: '/collections/thoughts/{slug}',
+    listPage: '/collections/thoughts/',
+    backLabel: 'thoughts',
+    showInCollectionsList: true
+  },
+  // ... more collections
+}
 ```
-src/pages/collections.astro
-src/pages/collections/[collection].astro
-```
+
+**To add a new collection:**
+1. Add entry to `CONTENT_STRUCTURE` in `src/collections.config.ts`
+2. Create folder `src/content/{collection}/`
+3. Run `pnpm astro sync`
+
+**No need to edit multiple files!** The system automatically:
+- Generates routes
+- Updates collection list page
+- Sets up back buttons
+- Creates TypeScript types
 
 ## Tips
 
@@ -144,13 +170,36 @@ src/pages/collections/[collection].astro
 3. **Be consistent** - Use consistent naming and formatting
 4. **Document changes** - Keep notes on customizations you make
 
+## Image Assets
+
+Each collection has an `_assets/` folder for images:
+
+```
+src/content/thoughts/
+├── _assets/
+│   └── my-image.jpg
+└── my-post.md
+```
+
+Reference images in posts:
+```markdown
+![Description](./\_assets/my-image.jpg)
+```
+
+**Benefits:**
+- Images stay with their collection
+- Easy to organize and find
+- Portable - move collection, images come with it
+
 ## Advanced Customization
 
 For more advanced customization:
-- Edit layouts in `src/layouts/`
-- Modify components in `src/components/`
-- Adjust styles in `src/styles/`
-- Configure build settings in `astro.config.ts`
+- **Layouts** - Edit files in `src/layouts/`
+- **Components** - Modify files in `src/components/`
+- **Styles** - Adjust CSS in component files
+- **Build settings** - Configure `astro.config.ts`
+- **Collections system** - Customize `src/collections.config.ts`
+- **Content schema** - Modify `src/content.config.ts`
 
 ## Need Help?
 

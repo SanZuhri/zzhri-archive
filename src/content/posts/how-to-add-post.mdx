@@ -9,27 +9,27 @@ export const postSteps = [
   {
     number: 1,
     title: 'Choose Collection',
-    description: 'Decide which collection your post belongs to (astronomy, geography, literature, or posts for guides)'
+    description: 'Pick: thoughts, media, gallery, projects, or posts'
   },
   {
     number: 2,
     title: 'Create File',
-    description: 'Create a .md or .mdx file in the collection folder with a descriptive name'
+    description: 'Create .md or .mdx file with descriptive name'
   },
   {
     number: 3,
     title: 'Add Frontmatter',
-    description: 'Add required metadata: title and pubDate at the top of the file'
+    description: 'Add title and pubDate (image optional)'
   },
   {
     number: 4,
     title: 'Write Content',
-    description: 'Write your content using Markdown or MDX syntax'
+    description: 'Write using Markdown or MDX syntax'
   },
   {
     number: 5,
-    title: 'Build & Deploy',
-    description: 'Run npm run build to generate your site with the new post'
+    title: 'Preview',
+    description: 'Run: npm run dev to see your post'
   }
 ]
 
@@ -43,26 +43,50 @@ Adding a post to your Archive is simple. This guide covers everything you need t
 
 ### Step 1: Choose Your Collection
 
-Decide which collection your post belongs to:
-- `src/content/astronomy/` - For astronomy posts
-- `src/content/geography/` - For geography posts
-- `src/content/literature/` - For literature posts
-- `src/content/posts/` - For guide posts
-- Or any custom collection you've created
+Pick the collection that fits your content:
+
+| Collection | Folder | Purpose | URL Pattern |
+|------------|--------|---------|-------------|
+| **Thoughts** | `src/content/thoughts/` | Reflections & ideas | `/collections/thoughts/{slug}` |
+| **Media** | `src/content/media/` | Books, movies, music | `/collections/media/{slug}` |
+| **Gallery** | `src/content/gallery/` | Photos & visuals | `/collections/gallery/{slug}` |
+| **Projects** | `src/content/projects/` | Work & creativity | `/collections/projects/{slug}` |
+| **Posts** | `src/content/posts/` | Guides & docs | `/{slug}` |
+
+**Tip:** Check `src/collections.config.ts` to see all available collections and their settings.
 
 ### Step 2: Create the File
 
-Create a new markdown file with a descriptive name:
+Create a new file in your chosen collection folder:
 
+**Examples:**
+
+For a thought/reflection:
 ```bash
-src/content/astronomy/mars-exploration.md
+src/content/thoughts/life-lessons.md
 ```
 
-**Naming Tips:**
-- Use lowercase letters
-- Use hyphens instead of spaces
-- Be descriptive but concise
-- Avoid special characters
+For a media review:
+```bash
+src/content/media/favorite-book.md
+```
+
+For a gallery post:
+```bash
+src/content/gallery/sunset-photos.md
+```
+
+For a project:
+```bash
+src/content/projects/portfolio-website.md
+```
+
+**Naming Rules:**
+- ✅ Use lowercase letters
+- ✅ Use hyphens for spaces (`my-post` not `my_post` or `myPost`)
+- ✅ Be descriptive (`chocolate-cake` not `post1`)
+- ❌ Avoid special characters (`!@#$%`)
+- 💡 File name becomes the URL slug
 
 ### Step 3: Add Frontmatter
 
@@ -70,9 +94,9 @@ Every post needs frontmatter at the top:
 
 ```markdown
 ---
-title: 'Mars Exploration: Past and Future'
-pubDate: 2024-10-29
-image: '/images/mars.jpg'  # Optional
+title: 'Life Lessons from 2024'
+pubDate: 2024-11-01
+image: '/images/lessons.jpg'  # Optional
 ---
 ```
 
@@ -81,7 +105,7 @@ image: '/images/mars.jpg'  # Optional
 - `pubDate` - Publication date (YYYY-MM-DD format)
 
 **Optional Fields:**
-- `image` - Featured image path
+- `image` - Featured image path (for OG images and thumbnails)
 
 ### Step 4: Write Your Content
 
@@ -89,34 +113,45 @@ After the frontmatter, write your content using Markdown:
 
 ```markdown
 ---
-title: 'Mars Exploration'
-pubDate: 2024-10-29
+title: 'Life Lessons from 2024'
+pubDate: 2024-11-01
 ---
 
-Mars has fascinated humanity for centuries...
+This year has taught me valuable lessons...
 
-## Early Observations
+## Lesson 1: Patience
 
-The first telescopic observations...
+Learning to be patient with myself...
 
-## Modern Missions
+## Lesson 2: Growth
 
-Recent missions like Perseverance...
+Embracing change and personal growth...
 ```
 
-### Step 5: Preview and Build
+### Step 5: Preview Your Post
 
-Run the development server to preview:
+**If dev server is already running:**
+- Just save your file
+- Refresh your browser
+- Changes appear automatically! ✨
+
+**If dev server is not running:**
 
 ```bash
 npm run dev
 ```
 
-Then build for production:
+Then open your browser and visit:
+- For collection posts: `http://localhost:4321/collections/{collection}/{slug}/`
+- For guide posts: `http://localhost:4321/{slug}/`
 
-```bash
-npm run build
-```
+**Example URLs:**
+- `http://localhost:4321/collections/thoughts/life-lessons/`
+- `http://localhost:4321/collections/media/favorite-book/`
+- `http://localhost:4321/how-to-add-post/` (guide post)
+
+**Hot Reload:**
+Posts in existing collections support hot reload - no need to restart the dev server!
 
 ## Markdown Features
 
@@ -144,8 +179,15 @@ Archive supports standard Markdown plus:
 ```
 
 ### Images
+
+**Option 1: Using _assets folder (Recommended)**
 ```markdown
-![Alt text](/path/to/image.jpg)
+![Alt text](./\_assets/my-image.jpg)
+```
+
+**Option 2: Using public folder**
+```markdown
+![Alt text](/images/my-image.jpg)
 ```
 
 ### Code Blocks
@@ -160,15 +202,73 @@ const hello = "world"
 > This is a quote
 ```
 
-## Draft Posts
+## Adding Images to Posts
 
-To create a draft post that won't be published, prefix the filename with an underscore:
+Each collection has an `_assets/` folder for storing images. This keeps your content organized.
 
-```bash
-src/content/astronomy/_draft-post.md
+### Folder Structure
+
+```
+src/content/thoughts/
+├── _assets/
+│   ├── photo1.jpg
+│   └── photo2.png
+├── my-post.md
+└── another-post.md
 ```
 
-Draft posts are automatically excluded from the site.
+### Using Images in Posts
+
+**Step 1:** Add your image to the `_assets/` folder
+
+```bash
+src/content/thoughts/_assets/sunset.jpg
+```
+
+**Step 2:** Reference it in your post using relative path
+
+```markdown
+---
+title: 'Beautiful Sunset'
+pubDate: 2024-11-01
+---
+
+![Sunset at the beach](./\_assets/sunset.jpg)
+
+This sunset was absolutely stunning...
+```
+
+### Image Path Options
+
+| Method | Path | Use Case |
+|--------|------|----------|
+| **_assets (Recommended)** | `./\_assets/image.jpg` | Collection-specific images |
+| **Public folder** | `/images/image.jpg` | Shared images across site |
+| **External URL** | `https://...` | Images hosted elsewhere |
+
+### Why Use _assets?
+
+- ✅ **Organized** - Images stay with their posts
+- ✅ **Portable** - Move collection folder, images come with it
+- ✅ **Clear** - Easy to see which images belong to which posts
+- ✅ **Clean** - No clutter in public folder
+
+## Draft Posts
+
+To create a draft post that won't appear on your site, prefix the filename with an underscore:
+
+**Examples:**
+```bash
+src/content/thoughts/_work-in-progress.md
+src/content/media/_draft-review.md
+src/content/gallery/_example.md
+```
+
+**How it works:**
+- ✅ Files starting with `_` are ignored during build
+- ✅ They won't appear in post lists or be accessible via URL
+- ✅ Perfect for work-in-progress content
+- ✅ Remove the `_` prefix when ready to publish
 
 ## Tips for Great Posts
 
@@ -178,10 +278,58 @@ Draft posts are automatically excluded from the site.
 4. **Keep it focused** - One topic per post
 5. **Proofread** - Check for typos and formatting issues
 
+## Post URLs
+
+Posts in different collections have different URL patterns:
+
+- **Guide posts** (`posts` collection): `/{slug}`
+  - Example: `/how-to-add-post/`
+  
+- **Collection posts**: `/collections/{collection}/{slug}`
+  - Example: `/collections/thoughts/life-lessons/`
+  - Example: `/collections/media/favorite-book/`
+
+## Development Workflow
+
+### Hot Reload (No Restart Needed)
+
+When working on posts, you get instant feedback:
+
+1. **Start dev server once:**
+   ```bash
+   npm run dev
+   ```
+
+2. **Edit your posts:**
+   - Save file
+   - Refresh browser
+   - See changes instantly!
+
+3. **What works with hot reload:**
+   - ✅ Content changes
+   - ✅ Frontmatter updates
+   - ✅ New posts in existing collections
+   - ✅ Image additions
+   - ✅ Component edits
+
+### When to Restart
+
+Only restart if you:
+- ❌ Add a new collection
+- ❌ Edit config files
+- ❌ Install new packages
+
+**Quick restart:**
+```bash
+# Stop server (Ctrl+C), then:
+npm run dev
+```
+
 ## Next Steps
 
 Now that you know how to add posts, explore:
 - [How to Add a New Collection](/how-to-add-collection/) - Create custom collections
 - [Customizing Your Archive](/customizing-archive/) - Personalize your archive
+- [Using MDX](/using-mdx/) - Add interactive components to your posts
 
-Happy writing!
+Happy writing! ✍️

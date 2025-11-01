@@ -8,45 +8,44 @@ import FlowDiagram from '@/components/examples/FlowDiagram.astro'
 export const collectionSteps = [
     {
         number: 1,
-        title: 'Create Folder',
-        description: 'Create a new folder in src/content/ with your collection name'
+        title: 'Edit Config',
+        description: 'Add collection entry to src/collections.config.ts'
     },
     {
         number: 2,
-        title: 'Update Config',
-        description: 'Add collection definition to src/content.config.ts'
+        title: 'Create Folder',
+        description: 'Create folder: src/content/[collection-name]/'
     },
     {
         number: 3,
-        title: 'Update Collections Page',
-        description: 'Add collection metadata to src/pages/collections.astro'
+        title: 'Sync Types',
+        description: 'Run: pnpm astro sync'
     },
     {
         number: 4,
-        title: 'Update Collection Routes',
-        description: 'Add collection to routing arrays in [collection].astro files'
+        title: 'Add Content',
+        description: 'Create your first .md or .mdx file'
     },
     {
         number: 5,
-        title: 'Add First Post',
-        description: 'Create your first post in the new collection folder'
-    },
-    {
-        number: 6,
-        title: 'Build & Test',
-        description: 'Run npm run build and verify your new collection works'
+        title: 'Test',
+        description: 'Run: npm run dev and visit /collections/'
     }
 ]
 
-This guide will walk you through the process of adding a new collection to your Archive.
+This guide will walk you through the **simplified process** of adding a new collection to your Archive using the unified collection system.
 
 ## What is a Collection?
 
- A collection is a group of related posts. For example, you might have collections for:
-- **Gallery** - Photos & visuals
+A collection is a group of related posts. For example, you might have collections for:
 - **Thoughts** - Reflections & ideas
+- **Media** - Books, music, movies, etc
+- **Gallery** - Photos & visuals
 - **Projects** - Work & creativity
-- **Media** - Books, music, movies, series, anime
+
+## New Simplified System
+
+Archive now uses a **single source of truth** for collections. Instead of editing 5+ files, you only need to edit **one config file** and create a folder!
 
 ## Collection Creation Flow
 
@@ -54,150 +53,213 @@ This guide will walk you through the process of adding a new collection to your 
 
 ## Step-by-Step Guide
 
-### Step 1: Create the Content Folder
+### Step 1: Edit Collections Config
 
-Create a new folder in `src/content/` with your collection name:
+Open `src/collections.config.ts` and add your new collection:
+
+```typescript
+export const CONTENT_STRUCTURE = {
+  posts: { /* ... */ },
+  thoughts: { /* ... */ },
+  media: { /* ... */ },
+  gallery: { /* ... */ },
+  projects: { /* ... */ },
+  
+  // Add your new collection here
+  recipes: {
+    type: 'collection' as const,
+    title: 'Recipes',
+    description: 'Cooking recipes & food',
+    urlPattern: '/collections/recipes/{slug}',
+    listPage: '/collections/recipes/',
+    backLabel: 'recipes',
+    showInCollectionsList: true
+  },
+  
+  about: { /* ... */ }
+}
+```
+
+**What happens automatically:**
+- ✅ Collection appears on `/collections/` page
+- ✅ Routing is set up at `/collections/recipes/`
+- ✅ Back buttons work correctly
+- ✅ TypeScript types are ready after sync
+
+### Step 2: Create the Content Folder
+
+Create a new folder with the same name:
 
 ```bash
-src/content/history/
+mkdir src/content/recipes
+mkdir src/content/recipes/_assets
 ```
 
-### Step 2: Update Content Config
-
-Open `src/content.config.ts` and add your new collection:
-
-```typescript
-const history = defineCollection({
-  loader: glob({ base: './src/content/history', pattern: '**/*.{md,mdx}' }),
-  schema: () => postSchema
-})
-
-// Add to exports
-export const collections = {
-  posts,
-  gallery,
-  thoughts,
-  projects,
-  media,
-  history,  // Add your new collection here
-  about
-}
+Or on Windows:
+```bash
+md src\content\recipes
+md src\content\recipes\_assets
 ```
 
-### Step 3: Update Collections Page
-
-Open `src/pages/collections.astro` and add your collection to the array:
-
-```typescript
-const collections = [
-  {
-    name: 'gallery',
-    title: 'Gallery',
-    description: 'Photos & visuals'
-  },
-  {
-    name: 'thoughts',
-    title: 'Thoughts',
-    description: 'Reflections & ideas'
-  },
-  {
-    name: 'projects',
-    title: 'Projects',
-    description: 'Work & creativity'
-  },
-  {
-    name: 'media',
-    title: 'Media',
-    description: 'Books, music, movies, series, anime'
-  },
-  {
-    name: 'history',  // Add your new collection
-    title: 'History',
-    description: 'Posts about historical events'
-  }
-]
+**Folder Structure:**
+```
+src/content/recipes/
+├── _assets/          # Store images here
+│   └── .gitkeep
+├── README.md         # Optional: Collection documentation
+└── (your posts here)
 ```
 
-### Step 4: Update Collection Routes
+### Step 3: Sync TypeScript Types
 
-Open `src/pages/collections/[collection].astro` and add your collection to the array:
-
-```typescript
-export async function getStaticPaths() {
-  const collections = ['gallery', 'thoughts', 'projects', 'media', 'history']  // Add here
-  // ...
-}
-```
-
-Also update the metadata object:
-
-```typescript
-const collectionMeta: Record<string, { title: string; description: string }> = {
-  gallery: {
-    title: 'Gallery',
-    description: 'Photos & visuals'
-  },
-  thoughts: {
-    title: 'Thoughts',
-    description: 'Reflections & ideas'
-  },
-  projects: {
-    title: 'Projects',
-    description: 'Work & creativity'
-  },
-  media: {
-    title: 'Media',
-    description: 'Books, music, movies, series, anime'
-  },
-  history: {
-    title: 'History',
-    description: 'Posts about historical events'
-  }
-}
-```
-
-### Step 5: Update Post Routes
-
-Open `src/pages/collections/[collection]/[...slug].astro` and update:
-
-```typescript
-export async function getStaticPaths() {
-  const collections = ['gallery', 'thoughts', 'projects', 'media', 'history'] as const
-  // ...
-}
-```
-
-Also update the type:
-
-```typescript
-type Props = {
-  post: CollectionEntry<'gallery'> | CollectionEntry<'thoughts'> | CollectionEntry<'projects'> | CollectionEntry<'media'> | CollectionEntry<'history'>
-  collection: string
-}
-```
-
-### Step 6: Add Your First Post
-
-Create a markdown file in your new collection folder:
+Run Astro sync to generate types:
 
 ```bash
-src/content/history/world-war-ii.md
+pnpm astro sync
 ```
 
-With frontmatter:
+You'll see output like:
+```
+[content] Syncing content
+[content] Synced content
+[types] Generated 500ms
+```
+
+**Why sync is needed:**
+- Generates TypeScript types for your new collection
+- Updates `.astro/` folder with type definitions
+- Ensures type-safety across the application
+
+### Step 4: Add Your First Post
+
+Create a markdown file in your collection:
+
+**File:** `src/content/recipes/chocolate-cake.md`
 
 ```markdown
 ---
-title: 'World War II Overview'
-pubDate: 2024-10-30
+title: 'Best Chocolate Cake Recipe'
+pubDate: 2024-11-01
 ---
 
-Your content here...
+![Chocolate Cake](./\_assets/chocolate-cake.jpg)
+
+This is my favorite chocolate cake recipe!
+
+## Ingredients
+
+- 2 cups flour
+- 1 cup sugar
+- 1/2 cup cocoa powder
+- ...
+
+## Instructions
+
+1. Preheat oven to 350°F
+2. Mix dry ingredients...
+3. Bake for 30 minutes
+
+![Finished cake](./\_assets/cake-finished.jpg)
 ```
 
-## That's It!
+**Don't forget to add images:**
+- `src/content/recipes/_assets/chocolate-cake.jpg`
+- `src/content/recipes/_assets/cake-finished.jpg`
 
-Your new collection is now ready. Visit `/collections/` to see it listed, or go directly to `/collections/history/` to see posts in that collection.
+### Step 5: Restart Dev Server & Test
+
+**If dev server is running, stop it (Ctrl+C) and restart:**
+
+```bash
+npm run dev
+```
+
+**Or combine sync + start in one command:**
+
+```bash
+pnpm astro sync && npm run dev
+```
+
+**Why restart is needed:**
+- Astro needs to reload configuration
+- New routes need to be generated
+- Vite needs to re-optimize dependencies
+
+Then visit:
+- `http://localhost:4321/collections/` - See your collection listed
+- `http://localhost:4321/collections/recipes/` - View collection page
+- `http://localhost:4321/collections/recipes/chocolate-cake/` - View your post
+
+## Configuration Properties Explained
+
+Each collection in `CONTENT_STRUCTURE` has these properties:
+
+| Property | Required | Description | Example |
+|----------|----------|-------------|---------|
+| `type` | ✅ | Collection type | `'collection'` |
+| `title` | ✅ | Display name | `'Recipes'` |
+| `description` | ✅ | Short description | `'Cooking recipes & food'` |
+| `urlPattern` | ✅ | URL structure | `'/collections/recipes/{slug}'` |
+| `listPage` | ✅ | Collection list URL | `'/collections/recipes/'` |
+| `backLabel` | ✅ | Back button text | `'recipes'` |
+| `showInCollectionsList` | ✅ | Show on /collections/ | `true` |
+
+**Important Notes:**
+- Use `type: 'collection' as const` for regular collections
+- Use lowercase for collection names (no spaces)
+- Keep descriptions short (under 50 characters)
+- URL pattern must include `{slug}` placeholder
+
+## Empty Collections
+
+Collections can be empty (0 posts) and will still appear on the collections page with a count of 0. This is useful for:
+- Planning future content
+- Showing what's coming soon
+- Maintaining consistent navigation
+
+**Note:** You may see warnings like:
+```
+[WARN] [glob-loader] No files found matching "**/*.{md,mdx}" in directory "src\content\gallery"
+```
+
+This is **normal and not an error**. The collection will still work - just add your first post when ready!
+
+## Removing a Collection
+
+To remove a collection:
+
+1. Delete the entry from `src/collections.config.ts`
+2. Optionally delete the folder from `src/content/`
+3. Run `pnpm astro sync`
+
+## When to Sync & Restart
+
+Understanding when you need to sync and restart saves time:
+
+### ✅ NO Sync/Restart Needed (Hot Reload Works)
+
+These changes are detected automatically:
+- Adding new posts to existing collections
+- Editing content in `.md` or `.mdx` files
+- Updating frontmatter (title, date, etc.)
+- Adding images to `_assets/` folders
+- Modifying component files
+
+Just save the file and refresh your browser!
+
+### ❌ Sync + Restart Required
+
+These changes need `pnpm astro sync` and dev server restart:
+- Adding a new collection to `collections.config.ts`
+- Modifying collection properties in `collections.config.ts`
+- Editing `content.config.ts`
+- Editing `astro.config.ts`
+- Installing new npm packages
+
+**Quick command:**
+```bash
+pnpm astro sync && npm run dev
+```
 
 ## Tips
 
@@ -205,3 +267,4 @@ Your new collection is now ready. Visit `/collections/` to see it listed, or go 
 - Keep collection descriptions short and clear
 - Organize posts logically within each collection
 - Use consistent naming conventions for post files
+- Remember to sync + restart after adding collections
