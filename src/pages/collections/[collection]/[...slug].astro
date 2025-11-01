@@ -26,12 +26,7 @@ export async function getStaticPaths() {
 }
 
 type Props = {
-  post:
-    | CollectionEntry<'gallery'>
-    | CollectionEntry<'thoughts'>
-    | CollectionEntry<'projects'>
-    | CollectionEntry<'media'>
-    | CollectionEntry<'blog'>
+  post: CollectionEntry<CollectionKey>
   collection: CollectionKey
 }
 

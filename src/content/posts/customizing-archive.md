@@ -1,17 +1,17 @@
 ---
 title: 'Customizing Your Archive'
-pubDate: 2025-10-30
+pubDate: 2024-10-28
 ---
 
-Learn how to customize your Archive to match your preferences and needs.
+Want to make this archive yours? Here's what you can change.
 
-## Configuration File
+## Where everything lives
 
-The main configuration is in `src/config.ts`. This file controls the appearance and behavior of your Archive.
+Most settings are in `src/config.ts`. Open it up and you'll see options for site info, layout, dates, and post features.
 
-## Site Information
+## The basics
 
-Update your site details:
+First things first—update your site details:
 
 ```typescript
 site: {
@@ -23,38 +23,34 @@ site: {
 }
 ```
 
-## Layout Settings
+Pretty self-explanatory.
 
-### Content Width
+## Layout stuff
 
-Adjust the maximum width of content:
+**Content width:**  
+Too wide? Too narrow? Change it:
 
 ```typescript
 general: {
-  contentWidth: '45rem', // Default: 45rem
-  // ...
+  contentWidth: '45rem', // or whatever feels right
 }
 ```
 
-### Centered Layout
-
-Toggle between centered and left-aligned layout:
+**Centered or left-aligned:**  
+Personal preference really:
 
 ```typescript
 general: {
-  centeredLayout: true, // true = centered, false = left-aligned
-  // ...
+  centeredLayout: true, // false for left-aligned
 }
 ```
 
-### Theme Toggle
-
-Show or hide the theme toggle button:
+**Theme toggle:**  
+That little sun/moon button. Show it or don't:
 
 ```typescript
 general: {
-  themeToggle: true, // true = show, false = hide
-  // ...
+  themeToggle: true, // false to hide it
 }
 ```
 

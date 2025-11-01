@@ -1,6 +1,8 @@
 ---
 import IndexLayout from '@/layouts/IndexLayout.astro'
 import PostList from '@/components/widgets/PostList.astro'
+import Breadcrumbs from '@/components/ui/Breadcrumbs.astro'
+import type { BreadcrumbItem } from '@/components/ui/Breadcrumbs.astro'
 import { themeConfig } from '@/config'
 import { getCollection } from 'astro:content'
 import { getCollectionKeys, getContentConfig, type CollectionKey } from '@/collections.config'
@@ -23,6 +25,13 @@ const posts = await getCollection(collection as any)
 const filteredPosts = posts
   .filter((post: any) => !post.id.startsWith('_'))
   .sort((a: any, b: any) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
+
+// Build breadcrumbs
+const breadcrumbs: BreadcrumbItem[] = [
+  { label: 'Home', href: '/' },
+  { label: 'Collections', href: '/collections/' },
+  { label: config.title }
+]
 ---
 
 <IndexLayout 
@@ -31,6 +40,7 @@ const filteredPosts = posts
   pageTitle={config.title}
 >
   <main>
+    <Breadcrumbs items={breadcrumbs} />
     <p class="collection-description">{config.description}</p>
     {filteredPosts.length > 0 ? (
       <PostList posts={filteredPosts as any} urlPrefix={`/collections/${collection}/`} />

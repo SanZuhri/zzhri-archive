@@ -17,6 +17,8 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "new": "tsx scripts/new-post.ts",
+    "new:post": "tsx scripts/new-post.ts",
+    "new:collection": "tsx scripts/new-collection.ts",
     "update-theme": "tsx scripts/update-theme.ts"
   },
   "dependencies": {

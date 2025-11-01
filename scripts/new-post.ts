@@ -1,55 +1,159 @@
-/**
- * Create a new post with frontmatter
- * Usage: pnpm new <title>
- */
+import fs from 'fs'
+import path from 'path'
+import readline from 'readline'
 
-import { existsSync, mkdirSync, writeFileSync } from 'node:fs'
-import { dirname, join } from 'node:path'
-import process from 'node:process'
+const rl = readline.createInterface({
+  input: process.stdin,
+  output: process.stdout
+})
 
-// Process title from all arguments
-const titleArgs: string[] = process.argv.slice(2)
-const rawTitle: string = titleArgs.length > 0 ? titleArgs.join(' ') : 'new-post'
-
-// Check if title starts with underscore (draft post)
-const isDraft: boolean = rawTitle.startsWith('_')
-const displayTitle: string = isDraft ? rawTitle.slice(1) : rawTitle
-
-const fileName: string = rawTitle
-  .toLowerCase()
-  .replace(/[^a-z0-9\s-_]/g, '') // Remove special characters but keep underscore and hyphen
-  .replace(/\s+/g, '-') // Replace spaces with hyphens
-  .replace(/-+/g, '-') // Replace multiple hyphens with single
-  .replace(/^-|-$/g, '') // Remove leading/trailing hyphens
-const targetFile: string = `${fileName}.md`
-const fullPath: string = join('src/content/posts', targetFile)
-
-// Check if the target file already exists
-if (existsSync(fullPath)) {
-  console.error(`😇 File already exists: ${fullPath}`)
-  process.exit(1)
+function question(query: string): Promise<string> {
+  return new Promise((resolve) => rl.question(query, resolve))
 }
 
-// Ensure the directory structure exists
-mkdirSync(dirname(fullPath), { recursive: true })
+function slugify(text: string): string {
+  return text
+    .toLowerCase()
+    .replace(/[^\w\s-]/g, '')
+    .replace(/\s+/g, '-')
+    .replace(/-+/g, '-')
+    .trim()
+}
 
-// Generate frontmatter with current date
-const content: string = `---
-title: ${displayTitle}
-pubDate: '${new Date().toISOString().split('T')[0]}'
+async function main() {
+  const collectionArg = process.argv[2]
+  const titleArg = process.argv.slice(3).join(' ')
+
+  let collection = collectionArg
+  let title = titleArg
+
+  // Interactive mode if no arguments
+  if (!collection) {
+    console.log('\n📝 Create a new post\n')
+
+    // List available collections
+    const contentPath = path.join(process.cwd(), 'src', 'content')
+    const collections = fs.readdirSync(contentPath)
+      .filter(name => {
+        const stat = fs.statSync(path.join(contentPath, name))
+        return stat.isDirectory() && name !== 'about'
+      })
+
+    console.log('Available collections:')
+    collections.forEach((col, i) => console.log(`  ${i + 1}. ${col}`))
+    console.log()
+
+    collection = await question('Collection name: ')
+  }
+
+  if (!collection) {
+    console.error('❌ Error: Collection name is required')
+    rl.close()
+    process.exit(1)
+  }
+
+  // Check if collection exists
+  const collectionPath = path.join(process.cwd(), 'src', 'content', collection)
+  if (!fs.existsSync(collectionPath)) {
+    console.error(`❌ Error: Collection "${collection}" does not exist`)
+    console.log(`\nCreate it first: pnpm new:collection ${collection}`)
+    rl.close()
+    process.exit(1)
+  }
+
+  if (!title) {
+    title = await question('Post title: ')
+  }
+
+  if (!title) {
+    console.error('❌ Error: Post title is required')
+    rl.close()
+    process.exit(1)
+  }
+
+  // Ask for image (optional)
+  const hasImage = await question('Add image? (y/N): ')
+  let imagePath = ''
+
+  if (hasImage.toLowerCase() === 'y' || hasImage.toLowerCase() === 'yes') {
+    const imageFile = await question('Image filename (in _assets/): ')
+    if (imageFile) {
+      imagePath = `./_assets/${imageFile}`
+    }
+  }
+
+  rl.close()
+
+  // Generate slug
+  const slug = slugify(title)
+  const today = new Date().toISOString().split('T')[0]
+
+  // Determine file extension
+  const usesMdx = imagePath || collection === 'posts'
+  const extension = usesMdx ? 'mdx' : 'md'
+  const filename = `${slug}.${extension}`
+  const filepath = path.join(collectionPath, filename)
+
+  // Check if file exists
+  if (fs.existsSync(filepath)) {
+    console.error(`❌ Error: Post "${filename}" already exists in ${collection}`)
+    process.exit(1)
+  }
+
+  // Create post content
+  let content = `---
+title: '${title}'
+pubDate: ${today}
 ---
 
+Write your content here...
+
+## Section 1
+
+Your content...
+
+## Section 2
+
+More content...
 `
 
-// Write the new post file
-try {
-  writeFileSync(fullPath, content)
-  if (isDraft) {
-    console.log(`📝 Draft created: ${fullPath}`)
-  } else {
-    console.log(`✅ Post created: ${fullPath}`)
+  if (imagePath) {
+    content = `---
+title: '${title}'
+pubDate: ${today}
+---
+
+![${title}](${imagePath})
+
+Write your content here...
+
+## Section 1
+
+Your content...
+
+## Section 2
+
+More content...
+`
   }
-} catch (error) {
-  console.error('⚠️ Failed to create post:', error)
-  process.exit(1)
+
+  // Write file
+  fs.writeFileSync(filepath, content)
+
+  console.log(`\n✨ Post created successfully!\n`)
+  console.log(`📄 File: src/content/${collection}/${filename}`)
+  console.log(`📅 Date: ${today}`)
+  console.log(`🔗 URL: /collections/${collection}/${slug}/`)
+
+  if (imagePath) {
+    console.log(`\n📸 Don't forget to add your image:`)
+    console.log(`   src/content/${collection}/_assets/${path.basename(imagePath)}`)
+  }
+
+  console.log(`\n💡 Next steps:`)
+  console.log(`   1. Edit the post: src/content/${collection}/${filename}`)
+  console.log(`   2. Start dev server: npm run dev`)
+  console.log(`   3. Visit: http://localhost:4321/collections/${collection}/${slug}/\n`)
 }
+
+main().catch(console.error)

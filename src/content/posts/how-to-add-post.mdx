@@ -8,38 +8,93 @@ import FlowDiagram from '@/components/examples/FlowDiagram.astro'
 export const postSteps = [
   {
     number: 1,
-    title: 'Choose Collection',
-    description: 'Pick: thoughts, media, gallery, projects, or posts'
+    title: 'Run CLI',
+    description: 'pnpm new:post <collection> "Title"'
   },
   {
     number: 2,
-    title: 'Create File',
-    description: 'Create .md or .mdx file with descriptive name'
+    title: 'Done!',
+    description: 'Post created with frontmatter'
   },
   {
     number: 3,
-    title: 'Add Frontmatter',
-    description: 'Add title and pubDate (image optional)'
+    title: 'Edit Content',
+    description: 'Open file and write your content'
   },
   {
     number: 4,
-    title: 'Write Content',
-    description: 'Write using Markdown or MDX syntax'
+    title: 'Add Images',
+    description: 'Put images in _assets/ folder (optional)'
   },
   {
     number: 5,
     title: 'Preview',
-    description: 'Run: npm run dev to see your post'
+    description: 'Save and refresh browser (hot reload!)'
   }
 ]
 
-Adding a post to your Archive is simple. This guide covers everything you need to know.
+Want to add a post? Here's how.
 
 ## Quick Start Flow
 
 <FlowDiagram steps={postSteps} title="Post Creation Workflow" />
 
-## Detailed Steps
+---
+
+## The fast way (CLI)
+
+Just run this:
+
+```bash
+pnpm new:post thoughts "Life Lessons from 2024"
+```
+
+Done. The CLI creates the file, adds the frontmatter, generates a proper slug, and tells you where everything is:
+
+```
+✨ Post created successfully!
+
+📄 File: src/content/thoughts/life-lessons-from-2024.md
+📅 Date: 2024-11-01
+🔗 URL: /collections/thoughts/life-lessons-from-2024/
+```
+
+### Don't remember the collection name?
+
+No problem. Just run `pnpm new:post` without arguments and it'll ask you:
+
+```
+📝 Create a new post
+
+Available collections:
+  1. posts
+  2. thoughts
+  3. media
+  4. gallery
+  5. projects
+
+Collection name: thoughts
+Post title: Life Lessons from 2024
+Add image? (y/N): n
+```
+
+### Got images?
+
+The CLI handles that too:
+
+```bash
+pnpm new:post gallery "Sunset Photos"
+# Add image? y
+# Image filename: sunset.jpg
+```
+
+It'll create the post with the image reference and remind you to add the actual file to `_assets/`.
+
+---
+
+## 📝 Method 2: Manual Setup
+
+If you prefer manual control, follow these steps:
 
 ### Step 1: Choose Your Collection
 

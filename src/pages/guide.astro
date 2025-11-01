@@ -2,10 +2,18 @@
 import IndexLayout from '@/layouts/IndexLayout.astro'
 import About from '@/components/widgets/About.astro'
 import PostList from '@/components/widgets/PostList.astro'
+import Breadcrumbs from '@/components/ui/Breadcrumbs.astro'
+import type { BreadcrumbItem } from '@/components/ui/Breadcrumbs.astro'
 import { themeConfig } from '@/config'
 import { getSortedFilteredPosts } from '@/utils/draft'
 
 const posts = await getSortedFilteredPosts()
+
+// Build breadcrumbs
+const breadcrumbs: BreadcrumbItem[] = [
+  { label: 'Home', href: '/' },
+  { label: 'Guide' }
+]
 ---
 
 <IndexLayout
@@ -14,6 +22,7 @@ const posts = await getSortedFilteredPosts()
   pageTitle="Guide"
 >
   <main>
+    <Breadcrumbs items={breadcrumbs} />
     <div class="guide-intro">
       <p class="intro-text">
         This section contains guides and documentation to help you build and customize your own digital archive.

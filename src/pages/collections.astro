@@ -1,5 +1,7 @@
 ---
 import IndexLayout from '@/layouts/IndexLayout.astro'
+import Breadcrumbs from '@/components/ui/Breadcrumbs.astro'
+import type { BreadcrumbItem } from '@/components/ui/Breadcrumbs.astro'
 import { themeConfig } from '@/config'
 import { getCollection } from 'astro:content'
 import { getCollections } from '@/collections.config'
@@ -20,6 +22,12 @@ const collectionsWithCount = await Promise.all(
     }
   })
 )
+
+// Build breadcrumbs
+const breadcrumbs: BreadcrumbItem[] = [
+  { label: 'Home', href: '/' },
+  { label: 'Collections' }
+]
 ---
 
 <IndexLayout 
@@ -28,6 +36,7 @@ const collectionsWithCount = await Promise.all(
   pageTitle="Collections"
 >
   <main>
+    <Breadcrumbs items={breadcrumbs} />
     <ul class="collection-list">
       {
         collectionsWithCount.map((collection) => (

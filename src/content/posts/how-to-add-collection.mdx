@@ -8,54 +8,106 @@ import FlowDiagram from '@/components/examples/FlowDiagram.astro'
 export const collectionSteps = [
     {
         number: 1,
-        title: 'Edit Config',
-        description: 'Add collection entry to src/collections.config.ts'
+        title: 'Run CLI',
+        description: 'pnpm new:collection <name>'
     },
     {
         number: 2,
-        title: 'Create Folder',
-        description: 'Create folder: src/content/[collection-name]/'
+        title: 'Done!',
+        description: 'Everything created automatically'
     },
     {
         number: 3,
-        title: 'Sync Types',
-        description: 'Run: pnpm astro sync'
+        title: 'Customize',
+        description: 'Edit description in collections.config.ts (optional)'
     },
     {
         number: 4,
-        title: 'Add Content',
-        description: 'Create your first .md or .mdx file'
+        title: 'Add Post',
+        description: 'pnpm new:post <collection> "Title"'
     },
     {
         number: 5,
-        title: 'Test',
-        description: 'Run: npm run dev and visit /collections/'
+        title: 'Preview',
+        description: 'npm run dev and visit /collections/'
     }
 ]
 
-This guide will walk you through the **simplified process** of adding a new collection to your Archive using the unified collection system.
+So you want to add a new collection? Good news—it's really easy now.
 
-## What is a Collection?
+## What's a collection anyway?
 
-A collection is a group of related posts. For example, you might have collections for:
-- **Thoughts** - Reflections & ideas
-- **Media** - Books, music, movies, etc
-- **Gallery** - Photos & visuals
-- **Projects** - Work & creativity
+Think of collections as folders for different types of content. You might have:
+- **Thoughts** for your reflections and ideas
+- **Media** for book/movie reviews
+- **Gallery** for photos
+- **Projects** for work stuff
 
-## New Simplified System
+Each collection gets its own page and URL structure. Pretty straightforward.
 
-Archive now uses a **single source of truth** for collections. Instead of editing 5+ files, you only need to edit **one config file** and create a folder!
+## Two ways to do this
+
+**The fast way:** One CLI command, everything's done.  
+**The manual way:** If you like doing things yourself.
+
+Pick whichever feels right.
 
 ## Collection Creation Flow
 
 <FlowDiagram steps={collectionSteps} title="Collection Setup Workflow" />
 
-## Step-by-Step Guide
+---
 
-### Step 1: Edit Collections Config
+## The fast way (CLI)
 
-Open `src/collections.config.ts` and add your new collection:
+Seriously, it's one command:
+
+```bash
+pnpm new:collection recipes
+```
+
+That's it. The CLI handles everything:
+- Creates the folder structure
+- Sets up the `_assets` folder for images
+- Adds an example file with instructions
+- Updates your config file
+- Generates TypeScript types
+- Tells you what to do next
+
+You'll see something like this:
+
+```
+🚀 Creating new collection: recipes
+
+✅ Created folder: src/content/recipes/
+✅ Created folder: src/content/recipes/_assets/
+✅ Created file: src/content/recipes/_example.md
+✅ Updated: src/collections.config.ts
+✅ Types generated successfully
+
+✨ Collection "recipes" created successfully!
+```
+
+### What's next?
+
+You can customize the description in `src/collections.config.ts` if you want. Or just start adding posts:
+
+```bash
+pnpm new:post recipes "Chocolate Cake Recipe"
+npm run dev
+```
+
+Visit `http://localhost:4321/collections/recipes/` and you're done.
+
+---
+
+## The manual way
+
+Prefer doing things yourself? No problem. Here's the step-by-step.
+
+### 1. Edit the config
+
+Open `src/collections.config.ts` and add your collection:
 
 ```typescript
 export const CONTENT_STRUCTURE = {
@@ -80,61 +132,52 @@ export const CONTENT_STRUCTURE = {
 }
 ```
 
-**What happens automatically:**
-- ✅ Collection appears on `/collections/` page
-- ✅ Routing is set up at `/collections/recipes/`
-- ✅ Back buttons work correctly
-- ✅ TypeScript types are ready after sync
+Once you save this, the system will automatically handle routing, navigation, and TypeScript types (after you sync).
 
-### Step 2: Create the Content Folder
+### 2. Create the folders
 
-Create a new folder with the same name:
+Make a folder for your collection and one for images:
 
 ```bash
 mkdir src/content/recipes
 mkdir src/content/recipes/_assets
 ```
 
-Or on Windows:
+Windows users:
 ```bash
 md src\content\recipes
 md src\content\recipes\_assets
 ```
 
-**Folder Structure:**
+You'll end up with:
 ```
 src/content/recipes/
-├── _assets/          # Store images here
-│   └── .gitkeep
-├── README.md         # Optional: Collection documentation
+├── _assets/          # images go here
 └── (your posts here)
 ```
 
-### Step 3: Sync TypeScript Types
+### 3. Sync the types
 
-Run Astro sync to generate types:
+Run this to generate TypeScript types:
 
 ```bash
 pnpm astro sync
 ```
 
-You'll see output like:
+You'll see:
 ```
 [content] Syncing content
 [content] Synced content
 [types] Generated 500ms
 ```
 
-**Why sync is needed:**
-- Generates TypeScript types for your new collection
-- Updates `.astro/` folder with type definitions
-- Ensures type-safety across the application
+This updates the `.astro/` folder so TypeScript knows about your new collection.
 
-### Step 4: Add Your First Post
+### 4. Add your first post
 
-Create a markdown file in your collection:
+Create a markdown file:
 
-**File:** `src/content/recipes/chocolate-cake.md`
+**`src/content/recipes/chocolate-cake.md`**
 
 ```markdown
 ---
@@ -162,52 +205,58 @@ This is my favorite chocolate cake recipe!
 ![Finished cake](./\_assets/cake-finished.jpg)
 ```
 
-**Don't forget to add images:**
+If you're using images, put them in `_assets/`:
 - `src/content/recipes/_assets/chocolate-cake.jpg`
 - `src/content/recipes/_assets/cake-finished.jpg`
 
-### Step 5: Restart Dev Server & Test
+### 5. Restart and test
 
-**If dev server is running, stop it (Ctrl+C) and restart:**
+Stop your dev server (Ctrl+C) and start it again:
 
 ```bash
 npm run dev
 ```
 
-**Or combine sync + start in one command:**
+Or do sync + start in one go:
 
 ```bash
 pnpm astro sync && npm run dev
 ```
 
-**Why restart is needed:**
-- Astro needs to reload configuration
-- New routes need to be generated
-- Vite needs to re-optimize dependencies
+Why restart? Astro needs to reload the config and generate new routes. It's just how it works.
 
-Then visit:
-- `http://localhost:4321/collections/` - See your collection listed
-- `http://localhost:4321/collections/recipes/` - View collection page
-- `http://localhost:4321/collections/recipes/chocolate-cake/` - View your post
+Then check:
+- `http://localhost:4321/collections/` — your collection should be listed
+- `http://localhost:4321/collections/recipes/` — collection page
+- `http://localhost:4321/collections/recipes/chocolate-cake/` — your post
 
-## Configuration Properties Explained
+## What each property means
 
-Each collection in `CONTENT_STRUCTURE` has these properties:
+When you add a collection, here's what each field does:
 
-| Property | Required | Description | Example |
-|----------|----------|-------------|---------|
-| `type` | ✅ | Collection type | `'collection'` |
-| `title` | ✅ | Display name | `'Recipes'` |
-| `description` | ✅ | Short description | `'Cooking recipes & food'` |
-| `urlPattern` | ✅ | URL structure | `'/collections/recipes/{slug}'` |
-| `listPage` | ✅ | Collection list URL | `'/collections/recipes/'` |
-| `backLabel` | ✅ | Back button text | `'recipes'` |
-| `showInCollectionsList` | ✅ | Show on /collections/ | `true` |
+- **`type`** — Set to `'collection'` for regular collections
+- **`title`** — Display name (like "Recipes")
+- **`description`** — Short description for the collections page
+- **`urlPattern`** — URL structure (must include `{slug}`)
+- **`listPage`** — Where the collection list lives
+- **`backLabel`** — Text for the back button
+- **`showInCollectionsList`** — Show it on `/collections/` or not
 
-**Important Notes:**
-- Use `type: 'collection' as const` for regular collections
-- Use lowercase for collection names (no spaces)
-- Keep descriptions short (under 50 characters)
+Keep collection names lowercase with no spaces. Keep descriptions under 50 characters.
+
+## Why this is better than before
+
+**The old way** meant editing 5+ files every time you added a collection. Config file, routing files, type definitions—all manual.
+
+**Now?** Edit one file (or run one command) and everything else happens automatically. Types get generated, routes get created, metadata gets loaded. No manual updates needed.
+
+Want the absolute easiest way?
+
+```bash
+pnpm new:collection recipes
+```
+
+That's it.
 - URL pattern must include `{slug}` placeholder
 
 ## Empty Collections

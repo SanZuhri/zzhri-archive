@@ -3,71 +3,61 @@ title: 'Welcome to Archive'
 pubDate: 2025-10-31
 ---
 
-Welcome to **Archive** - a minimal collection and archive system built with Astro and the Chiri theme.
+Hey there! Welcome to **Archive**.
 
-## What is Archive?
+This is a personal archive system I built to organize my thoughts, media reviews, photos, and projects. It's minimal by design—no clutter, just content.
 
-Archive is a simple yet powerful system for organizing your content into collections. Think of it as a digital library where you can:
+## What's this all about?
 
-- **Organize content** into themed collections (Thoughts, Media, Gallery, Projects, etc.)
-- **Browse easily** with a clean, minimal interface
-- **Navigate quickly** using the sidebar navigation and mobile menu
-- **Read comfortably** with a distraction-free reading experience
-- **Manage images** with organized `_assets` folders per collection
+Think of it as your *digital filing cabinet*, but way more pleasant to use. You can:
 
-## Key Features
+- Group related posts into **collections** (like Thoughts, Media, Gallery, Projects)
+- Browse everything with a clean interface that doesn't get in your way
+- Read without distractions—just you and the content
+- Keep images organized in `_assets` folders right next to your posts
 
-### Unified Collections System
-Group related posts together in collections. The new system uses a **single source of truth** (`collections.config.ts`) making it easy to add or modify collections.
+## What makes it nice to use
 
-**Current Collections:**
-- **Thoughts** - Reflections & ideas
-- **Media** - Books, movies, music reviews
-- **Gallery** - Photos & visuals
-- **Projects** - Work & creativity
+**Collections that make sense**  
+Everything's organized into collections—Thoughts for reflections, Media for reviews, Gallery for photos, Projects for work stuff. Adding a new collection? One command. That's it.
 
-### Minimal Design
-Built on the Chiri theme, Archive focuses on content with a clean, typography-first design.
+**Actually minimal**  
+Built on the Chiri theme. Just clean typography and content that's easy to read.
 
-### Easy Navigation
-- **Sidebar navigation** (desktop) for quick access to Home, Collections, and Guide
-- **Mobile menu** with hamburger icon for smaller screens
-- **Smart back buttons** that return you to the right place
-- **Collection pages** that list all posts with counts
-- **Consistent layout** across all pages
+**Images stay organized**  
+Each collection gets its own `_assets` folder. Your photos live next to your posts. Move a collection? Images come with it. Simple.
 
-### Organized Assets
-Each collection has its own `_assets/` folder for images, keeping everything organized and portable.
+## Want to learn more?
 
-## Getting Started
+I've written some guides to help you get started:
 
-To learn how to use Archive effectively, read through these guide posts:
+- **[How to Add a Post](/how-to-add-post/)** — The basics of creating content
+- **[How to Add a Collection](/how-to-add-collection/)** — Setting up new collections
+- **[Customizing Your Archive](/customizing-archive/)** — Make it yours
+- **[Theme Guide](/theme-guide/)** — All the config options
 
-1. **[How to Add a Post](/how-to-add-post/)** - Learn how to add posts to collections
-2. **[How to Add a New Collection](/how-to-add-collection/)** - Learn how to create new collections
-3. **[Customizing Your Archive](/customizing-archive/)** - Tips for personalizing your archive
-4. **[Theme Guide](/theme-guide/)** - Configuration options and features
+## Quick start
 
-## Quick Start
+**Adding a post** (the easy way):
+```bash
+pnpm new:post thoughts "My First Post"
+```
+Done. File created, frontmatter added, ready to write.
 
-**Add a new post (Hot Reload ✨):**
-1. Choose a collection (thoughts, media, gallery, or projects)
-2. Create a `.md` file in `src/content/{collection}/`
-3. Add frontmatter with `title` and `pubDate`
-4. Write your content
-5. Save & refresh browser - changes appear instantly!
+**Adding a collection** (also easy):
+```bash
+pnpm new:collection recipes
+```
+Folder created, config updated, types generated. Start adding posts.
 
-**Add a new collection (Requires Sync):**
-1. Edit `src/collections.config.ts`
-2. Create folder `src/content/{collection}/`
-3. Run `pnpm astro sync && npm run dev`
-4. Start adding posts!
+**Or do it manually** if you prefer—the guides show you how.
 
-## Development Tips
+## A few things to know
 
-- **Posts in existing collections** = Hot reload (instant preview)
-- **New collections or config changes** = Need sync + restart
-- Keep dev server running while writing posts
-- Only restart when adding collections or changing config
+When you're writing posts, changes show up instantly. Just save and refresh. No restart needed.
 
-Start exploring by visiting the [Collections](/collections/) page or continue reading the guides!
+But if you add a *new collection* or change config files, you'll need to restart the dev server. That's just how Astro works.
+
+---
+
+Ready to explore? Check out the [Collections](/collections/) page or dive into the guides above.
