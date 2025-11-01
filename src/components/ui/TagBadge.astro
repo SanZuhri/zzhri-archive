@@ -20,29 +20,47 @@ const { tag, clickable = true } = Astro.props
 <style>
   .tag-badge {
     display: inline-block;
-    padding: 0.125rem 0.5rem;
+    padding: 0;
     font-size: 0.75rem;
     font-family: var(--sans);
-    letter-spacing: 0.02em;
+    font-weight: var(--font-weight-regular);
+    letter-spacing: 0.01em;
     color: var(--text-secondary);
-    background-color: var(--bg-secondary);
-    border: 1px solid var(--border);
-    border-radius: 3px;
     text-decoration: none;
-    transition: all 0.15s ease-out;
+    transition: color 0.15s ease-out;
     white-space: nowrap;
+    position: relative;
+  }
+
+  .tag-badge::before {
+    content: '#';
+    opacity: 0.5;
+    margin-right: 0.125rem;
   }
 
   a.tag-badge:hover {
     color: var(--text-primary);
-    border-color: var(--text-tertiary);
-    background-color: var(--bg-tertiary);
+  }
+
+  a.tag-badge::after {
+    content: '';
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background-color: var(--text-tertiary);
+    opacity: 0;
+    transition: opacity 0.15s ease-out;
+  }
+
+  a.tag-badge:hover::after {
+    opacity: 0.5;
   }
 
   @media (max-width: 768px) {
     .tag-badge {
       font-size: 0.7rem;
-      padding: 0.1rem 0.4rem;
     }
   }
 </style>

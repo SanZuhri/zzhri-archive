@@ -72,24 +72,38 @@ const isTagsPage = currentPath.startsWith('/tags')
 
     function adjustPosition() {
       container = document.querySelector('.nav-sidebar-container')
-      if (!container || !centeredLayout) {
-        if (container) container.style.display = 'none'
+      if (!container) return
+
+      const pageWidth = window.innerWidth
+      
+      // Hide on mobile
+      if (pageWidth <= 768) {
+        container.style.display = 'none'
         return
       }
 
-      const pageWidth = window.innerWidth
-      const contentWidthValue = Math.max(parseFloat(contentWidth), 25)
-      const margin = (pageWidth - contentWidthValue * 16) / 2
-      const minSpace = 11 * 16 + 52
+      // Show sidebar
+      container.style.display = 'block'
 
-      if (margin >= minSpace) {
-        container.style.display = 'block'
-        container.classList.add('fixed-position')
-        const leftPosition = margin - 176 - 40
-        container.style.left = `${leftPosition}px`
+      if (centeredLayout) {
+        // Centered layout: fixed position with calculation
+        const contentWidthValue = Math.max(parseFloat(contentWidth), 25)
+        const margin = (pageWidth - contentWidthValue * 16) / 2
+        const minSpace = 11 * 16 + 52
+
+        if (margin >= minSpace) {
+          container.classList.add('fixed-position')
+          const leftPosition = margin - 176 - 40
+          container.style.left = `${leftPosition}px`
+        } else {
+          container.classList.remove('fixed-position')
+          container.style.left = ''
+          container.style.display = 'none'
+        }
       } else {
-        container.style.display = 'none'
+        // Left-aligned layout: static position
         container.classList.remove('fixed-position')
+        container.classList.add('static-position')
         container.style.left = ''
       }
     }

@@ -1,57 +1,96 @@
 ---
 import IndexLayout from '@/layouts/IndexLayout.astro'
 import { themeConfig } from '@/config'
+import { getCollection } from 'astro:content'
+import { getCollections } from '@/collections.config'
+
+// Get collection stats
+const collections = getCollections()
+const collectionsWithStats = await Promise.all(
+  collections.map(async (col) => {
+    const posts = await getCollection(col.key as any)
+    const filteredPosts = posts.filter((post: any) => !post.id.startsWith('_'))
+    const sortedPosts = filteredPosts.sort(
+      (a: any, b: any) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
+    )
+
+    const lastPost = sortedPosts[0] as any
+    const lastUpdated = lastPost?.data?.pubDate || null
+
+    return {
+      ...col,
+      count: filteredPosts.length,
+      lastUpdated
+    }
+  })
+)
+
+// Calculate total posts
+const totalPosts = collectionsWithStats.reduce((sum, col) => sum + col.count, 0)
+
+// Get relative time
+function getRelativeTime(date: Date | null) {
+  if (!date) return 'Never'
+
+  const now = new Date()
+  const diff = now.getTime() - date.getTime()
+  const days = Math.floor(diff / (1000 * 60 * 60 * 24))
+
+  if (days === 0) return 'Today'
+  if (days === 1) return 'Yesterday'
+  if (days < 7) return `${days} days ago`
+  if (days < 30) return `${Math.floor(days / 7)} weeks ago`
+  if (days < 365) return `${Math.floor(days / 30)} months ago`
+  return `${Math.floor(days / 365)} years ago`
+}
 ---
 
 <IndexLayout title={themeConfig.site.title} description={themeConfig.site.description}>
   <main>
-<div class="intro">
-      <h1>Hi, I'm {themeConfig.site.author}. Welcome to my archive.</h1>
-      
-      <div class="about-section">
-        <p class="description">
-          This is my personal digital archive where I collect and organize thoughts, ideas, and knowledge
-          across various topics that interest me. From photos and visuals to reflections and creative projects -
-          this space holds my journey of learning and discovery.
-        </p>
-        
-        <p class="description">
-          I built this archive as a way to document my interests and share what I've learned along the way. 
-          Feel free to explore the collections and dive into whatever catches your curiosity.
-        </p>
-      </div>
+    <div class="intro">
+      <h1>{themeConfig.site.author}</h1>
 
-      <div class="highlight-box">
-        <p class="highlight-title">🚀 Where to start?</p>
-        <p class="highlight-text">
-          Browse through my <a href="/collections/" class="inline-link">collections</a> to discover different topics, 
-          or check out some <a href="/guide/" class="inline-link">guides</a> if you're interested in building your own archive.
-        </p>
-      </div>
-      
-<div class="links">
-        <a href="/collections/" class="link-item">
-          <span class="link-title">Collections</span>
-          <span class="link-desc">Browse organized collections of posts</span>
-        </a>
-        
-        <a href="/guide/" class="link-item">
-          <span class="link-title">Guide</span>
-          <span class="link-desc">Learn how to use and customize Archive</span>
-        </a>
+      <p class="bio">
+        Personal archive of thoughts, ideas, and knowledge.
+        {totalPosts} posts across {collectionsWithStats.length} collections.
+      </p>
 
-        <a href="/tags/" class="link-item">
-          <span class="link-title">Tags</span>
-          <span class="link-desc">Browse posts by tags</span>
-        </a>
+      <nav class="main-nav">
+        <h2 class="nav-heading">Collections</h2>
+        <ul class="nav-list">
+          {
+            collectionsWithStats.map((col) => (
+              <li>
+                <a href={col.listPage} class="nav-link">
+                  <span class="nav-title">{col.title}</span>
+                  <span class="nav-count">{col.count}</span>
+                </a>
+              </li>
+            ))
+          }
+        </ul>
 
-        <a href="/archive/" class="link-item">
-          <span class="link-title">Archive</span>
-          <span class="link-desc">Browse all posts by date</span>
-        </a>
-       </div>
-     </div>
-   </main>
+        <h2 class="nav-heading">More</h2>
+        <ul class="nav-list">
+          <li>
+            <a href="/tags/" class="nav-link">
+              <span class="nav-title">Tags</span>
+            </a>
+          </li>
+          <li>
+            <a href="/archive/" class="nav-link">
+              <span class="nav-title">Archive</span>
+            </a>
+          </li>
+          <li>
+            <a href="/guide/" class="nav-link">
+              <span class="nav-title">Guide</span>
+            </a>
+          </li>
+        </ul>
+      </nav>
+    </div>
+  </main>
 </IndexLayout>
 
 <style>
@@ -62,93 +101,105 @@ import { themeConfig } from '@/config'
   h1 {
     font-size: 1.5rem;
     font-weight: 600;
-    margin: 0 0 1.5rem 0;
-    color: var(--text-primary);
-  }
-
-  .about-section {
-    margin-bottom: 2rem;
-  }
-
-  .description {
-    margin: 0 0 1rem 0;
-    color: var(--text-secondary);
-    opacity: 0.85;
-    line-height: 1.6;
-  }
-
-  .description:last-child {
-    margin-bottom: 0;
-  }
-
-  .highlight-box {
-    padding: 1rem;
-    margin-bottom: 2rem;
-    border: 1px solid var(--border);
-    border-radius: 4px;
-    background-color: var(--bg-secondary);
-  }
-
-  .highlight-title {
     margin: 0 0 0.5rem 0;
-    font-weight: 600;
     color: var(--text-primary);
   }
 
-  .highlight-text {
-    margin: 0;
+  .bio {
+    margin: 0 0 2.5rem 0;
     color: var(--text-secondary);
-    opacity: 0.85;
+    opacity: 0.75;
     line-height: 1.6;
   }
 
-  .inline-link {
+  /* Main Navigation */
+  .main-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+  }
+
+  .nav-heading {
+    font-size: 0.875rem;
+    font-weight: 500;
+    margin: 0 0 0.5rem 0;
     color: var(--text-primary);
-    text-decoration: underline;
-    text-decoration-color: var(--text-tertiary);
-    text-underline-offset: 2px;
-    transition: text-decoration-color 0.15s ease-out;
+    opacity: 0.9;
   }
 
-  .inline-link:hover {
-    text-decoration-color: var(--text-primary);
-  }
-
-  .links {
+  .nav-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
     display: flex;
     flex-direction: column;
-    gap: 0;
+    gap: 0.5rem;
   }
 
-  .link-item {
+  .nav-list li {
+    position: relative;
+  }
+
+  .nav-link {
     display: flex;
-    flex-direction: column;
-    gap: 0.25rem;
-    padding: 0.75rem 0;
-    border-bottom: 1px solid var(--border);
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem 0;
     text-decoration: none;
+    color: var(--text-primary);
     transition: opacity 0.15s ease-out;
+    border: none;
+    outline: none;
+  }
+
+  .nav-link::before,
+  .nav-link::after {
+    display: none !important;
+  }
+
+  .nav-link:hover,
+  .nav-link:focus {
+    text-decoration: none;
+    border: none;
   }
 
   @media (hover: hover) and (pointer: fine) {
-    .links:hover .link-item {
+    .nav-list:hover .nav-link {
       opacity: 0.4;
     }
 
-    .links:hover .link-item:hover {
+    .nav-list:hover .nav-link:hover {
       opacity: 1;
     }
   }
 
-  .link-title {
-    font-size: 1rem;
-    font-weight: 500;
-    color: var(--text-primary);
+  .nav-title {
+    font-size: 1.125rem;
+    font-weight: 400;
+    line-height: 1.5;
   }
 
-  .link-desc {
+  .nav-count {
     font-size: 0.875rem;
     color: var(--text-secondary);
     opacity: 0.75;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: var(--spacing-s);
+  }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    h1 {
+      font-size: 1.375rem;
+    }
+
+    .bio {
+      font-size: 0.9375rem;
+      margin-bottom: 2rem;
+    }
+
+    .main-nav {
+      gap: 1.75rem;
+    }
   }
 </style>

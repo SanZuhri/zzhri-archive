@@ -6,6 +6,7 @@ export interface ReadingTime {
   minutes: number
   time: number
   words: number
+  characters: number
 }
 
 // TOC item interface

@@ -10,12 +10,16 @@ export default function remarkReadingTime() {
     const readingTime = getReadingTime(textOnPage)
 
     const minutes = Math.max(1, Math.round(readingTime.minutes))
+    const wordCount = readingTime.words
+    const charCount = textOnPage.length
+    
     file.data.astro.frontmatter.minutesRead = `${minutes}min`
     file.data.astro.frontmatter.readingTime = {
       text: `${minutes}min`,
       minutes: minutes,
       time: readingTime.time,
-      words: readingTime.words
+      words: wordCount,
+      characters: charCount
     }
   }
 }

@@ -33,7 +33,15 @@ interface Props extends PostLayoutProps {
   tags?: string[]
 }
 
-const { title, pubDate, readingTime, toc, backUrl = '/', backLabel = 'index', tags = [] } = Astro.props
+const {
+  title,
+  pubDate,
+  readingTime,
+  toc,
+  backUrl = '/',
+  backLabel = 'index',
+  tags = []
+} = Astro.props
 
 const postSlug = Astro.url.pathname.split('/').filter(Boolean).pop() || ''
 const ogImage = `/open-graph/${postSlug}.png`
@@ -62,44 +70,46 @@ if (backUrl !== '/') {
   <ReadingProgress />
   <div class="post-container">
     <main>
-        <div class="prose">
-         <GradientMask />
-         <BackButton backUrl={backUrl} backLabel={backLabel} />
-         {themeConfig.post.toc && <TableOfContents toc={toc} />}
-         <div class="title">
-           <h1>{title}</h1>
-           <div class="meta">
-             <div class="date">
-               <FormattedDate date={pubDate} context="post" />
-               {
-                 themeConfig.post.readingTime && readingTime && (
-                   <span class="reading-time">
-                     <span class="separator">·</span>
-                     {readingTime.text}
-                   </span>
-                 )
-               }
-             </div>
-             <div class="utilities">
-               <CopyLink />
-               <ThemeToggle />
-             </div>
-           </div>
-           {tags && tags.length > 0 && (
-             <div class="tags-container">
-               {tags.map((tag) => (
-                 <TagBadge tag={tag} />
-               ))}
-             </div>
-           )}
-         </div>
-          <slot />
-          <AuthorBio />
-          <PostNavigation collection={collection} currentSlug={postSlug} />
+      <div class="prose">
+        <GradientMask />
+        <BackButton backUrl={backUrl} backLabel={backLabel} />
+        {themeConfig.post.toc && <TableOfContents toc={toc} />}
+        <div class="title">
+          <h1>{title}</h1>
+          <div class="meta">
+            <div class="date">
+              <FormattedDate date={pubDate} context="post" />
+              {
+                themeConfig.post.readingTime && readingTime && (
+                  <span class="reading-time">
+                    <span class="separator">·</span>
+                    {readingTime.text}
+                  </span>
+                )
+              }
+            </div>
+            <div class="utilities">
+              <CopyLink />
+              <ThemeToggle />
+            </div>
+          </div>
+          {
+            tags && tags.length > 0 && (
+              <div class="tags-container">
+                {tags.map((tag) => (
+                  <TagBadge tag={tag} />
+                ))}
+              </div>
+            )
+          }
         </div>
-     </main>
-     <GestureNavigation />
-     <ImageOptimizer />
+        <slot />
+        <AuthorBio />
+        <PostNavigation collection={collection} currentSlug={postSlug} />
+      </div>
+    </main>
+    <GestureNavigation />
+    <ImageOptimizer />
     <FootnoteScroll />
     <CopyCode />
     <GitHubCard />
