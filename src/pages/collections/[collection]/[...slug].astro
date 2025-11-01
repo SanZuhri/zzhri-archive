@@ -4,7 +4,7 @@ import PostLayout from '@/layouts/PostLayout.astro'
 import { render } from 'astro:content'
 
 export async function getStaticPaths() {
-  const collections = ['astronomy', 'geography', 'literature', 'movie'] as const
+  const collections = ['gallery', 'thoughts', 'projects', 'media'] as const
 
   const paths = await Promise.all(
     collections.map(async (collectionName) => {
@@ -26,10 +26,10 @@ export async function getStaticPaths() {
 
 type Props = {
   post:
-    | CollectionEntry<'astronomy'>
-    | CollectionEntry<'geography'>
-    | CollectionEntry<'literature'>
-    | CollectionEntry<'movie'>
+    | CollectionEntry<'gallery'>
+    | CollectionEntry<'thoughts'>
+    | CollectionEntry<'projects'>
+    | CollectionEntry<'media'>
   collection: string
 }
 

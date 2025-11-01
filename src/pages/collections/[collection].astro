@@ -5,8 +5,8 @@ import { themeConfig } from '@/config'
 import { getCollection } from 'astro:content'
 
 export async function getStaticPaths() {
-  const collections = ['astronomy', 'geography', 'literature', 'movie']
-  
+  const collections = ['gallery', 'thoughts', 'projects', 'media']
+
   return collections.map((collection) => ({
     params: { collection },
     props: { collection }
@@ -17,26 +17,26 @@ const { collection } = Astro.props
 
 // Metadata untuk setiap collection
 const collectionMeta: Record<string, { title: string; description: string }> = {
-  astronomy: {
-    title: 'Astronomy',
-    description: 'Posts about astronomy and space'
+  gallery: {
+    title: 'Gallery',
+    description: 'Photos & visuals'
   },
-  geography: {
-    title: 'Geography',
-    description: 'Posts about geography and earth'
+  thoughts: {
+    title: 'Thoughts',
+    description: 'Reflections & ideas'
   },
-  literature: {
-    title: 'Literature',
-    description: 'Posts about literature and books'
+  projects: {
+    title: 'Projects',
+    description: 'Work & creativity'
   },
-  movie: {
-    title: 'Movie',
-    description: 'Posts about movie and cinema'
+  media: {
+    title: 'Media',
+    description: 'Books, music, movies, etc'
   }
 }
 
 const meta = collectionMeta[collection]
-const posts = await getCollection(collection as 'astronomy' | 'geography' | 'literature' | 'movie')
+const posts = await getCollection(collection as 'gallery' | 'thoughts' | 'projects' | 'media')
 const filteredPosts = posts
   .filter((post: any) => !post.id.startsWith('_'))
   .sort((a: any, b: any) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
@@ -48,6 +48,7 @@ const filteredPosts = posts
   pageTitle={meta.title}
 >
   <main>
+    <p class="collection-description">{meta.description}</p>
     {filteredPosts.length > 0 ? (
       <PostList posts={filteredPosts} urlPrefix={`/collections/${collection}/`} />
     ) : (
@@ -57,9 +58,11 @@ const filteredPosts = posts
 </IndexLayout>
 
 <style>
-  .empty-message {
+  .collection-description {
     color: var(--text-secondary);
     opacity: 0.75;
-    padding: 2rem 0;
+    margin-bottom: 2rem;
+    font-size: 1.1rem;
+    line-height: 1.5;
   }
 </style>

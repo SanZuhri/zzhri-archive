@@ -3,34 +3,34 @@ import IndexLayout from '@/layouts/IndexLayout.astro'
 import { themeConfig } from '@/config'
 import { getCollection } from 'astro:content'
 
-// Definisi collections dengan metadata
+// Define collections with metadata
 const collections = [
   {
-    name: 'astronomy',
-    title: 'Astronomy',
-    description: 'Posts about astronomy and space'
+    name: 'gallery',
+    title: 'Gallery',
+    description: 'Photos & visuals'
   },
   {
-    name: 'geography',
-    title: 'Geography',
-    description: 'Posts about geography and earth'
+    name: 'thoughts',
+    title: 'Thoughts',
+    description: 'Reflections & ideas'
   },
   {
-    name: 'literature',
-    title: 'Literature',
-    description: 'Posts about literature and books'
+    name: 'projects',
+    title: 'Projects',
+    description: 'Work & creativity'
   },
   {
-    name: 'movie',
-    title: 'Movie',
-    description: 'Posts about movie and cinema'
+    name: 'media',
+    title: 'Media',
+    description: 'Books, music, movies, etc'
   },
 ]
 
 // Hitung jumlah posts di setiap collection
 const collectionsWithCount = await Promise.all(
   collections.map(async (col) => {
-    const posts = await getCollection(col.name as 'astronomy' | 'geography' | 'literature')
+    const posts = await getCollection(col.name as 'gallery' | 'thoughts' | 'projects' | 'media')
     const filteredPosts = posts.filter((post: any) => !post.id.startsWith('_'))
     return {
       ...col,

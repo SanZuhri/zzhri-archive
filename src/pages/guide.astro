@@ -8,13 +8,32 @@ import { getSortedFilteredPosts } from '@/utils/draft'
 const posts = await getSortedFilteredPosts()
 ---
 
-<IndexLayout 
-  title="Guide - " + themeConfig.site.title 
+<IndexLayout
+  title="Guide - " + themeConfig.site.title
   description="Guide and documentation posts"
   pageTitle="Guide"
 >
-  <About />
   <main>
+    <div class="guide-intro">
+      <p class="intro-text">
+        This section contains guides and documentation to help you build and customize your own digital archive.
+        Whether you're interested in setting up collections, adding posts, or modifying the theme, you'll find
+        step-by-step instructions here.
+      </p>
+    </div>
     <PostList posts={posts} />
   </main>
 </IndexLayout>
+
+<style>
+  .guide-intro {
+    margin-bottom: 2rem;
+  }
+
+  .intro-text {
+    color: var(--text-secondary);
+    opacity: 0.85;
+    line-height: 1.6;
+    font-size: 1rem;
+  }
+</style>

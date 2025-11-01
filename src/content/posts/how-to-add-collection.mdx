@@ -42,11 +42,11 @@ This guide will walk you through the process of adding a new collection to your 
 
 ## What is a Collection?
 
-A collection is a group of related posts. For example, you might have collections for:
-- **History** - Posts about historical events
-- **Science** - Posts about scientific topics
-- **Art** - Posts about art and artists
-- **Technology** - Posts about tech topics
+ A collection is a group of related posts. For example, you might have collections for:
+- **Gallery** - Photos & visuals
+- **Thoughts** - Reflections & ideas
+- **Projects** - Work & creativity
+- **Media** - Books, music, movies, series, anime
 
 ## Collection Creation Flow
 
@@ -73,13 +73,14 @@ const history = defineCollection({
 })
 
 // Add to exports
-export const collections = { 
-  posts, 
-  astronomy, 
-  geography, 
-  literature, 
+export const collections = {
+  posts,
+  gallery,
+  thoughts,
+  projects,
+  media,
   history,  // Add your new collection here
-  about 
+  about
 }
 ```
 
@@ -90,19 +91,24 @@ Open `src/pages/collections.astro` and add your collection to the array:
 ```typescript
 const collections = [
   {
-    name: 'astronomy',
-    title: 'Astronomy',
-    description: 'Posts about astronomy and space'
+    name: 'gallery',
+    title: 'Gallery',
+    description: 'Photos & visuals'
   },
   {
-    name: 'geography',
-    title: 'Geography',
-    description: 'Posts about geography and earth'
+    name: 'thoughts',
+    title: 'Thoughts',
+    description: 'Reflections & ideas'
   },
   {
-    name: 'literature',
-    title: 'Literature',
-    description: 'Posts about literature and books'
+    name: 'projects',
+    title: 'Projects',
+    description: 'Work & creativity'
+  },
+  {
+    name: 'media',
+    title: 'Media',
+    description: 'Books, music, movies, series, anime'
   },
   {
     name: 'history',  // Add your new collection
@@ -118,7 +124,7 @@ Open `src/pages/collections/[collection].astro` and add your collection to the a
 
 ```typescript
 export async function getStaticPaths() {
-  const collections = ['astronomy', 'geography', 'literature', 'history']  // Add here
+  const collections = ['gallery', 'thoughts', 'projects', 'media', 'history']  // Add here
   // ...
 }
 ```
@@ -127,7 +133,22 @@ Also update the metadata object:
 
 ```typescript
 const collectionMeta: Record<string, { title: string; description: string }> = {
-  // ... existing collections
+  gallery: {
+    title: 'Gallery',
+    description: 'Photos & visuals'
+  },
+  thoughts: {
+    title: 'Thoughts',
+    description: 'Reflections & ideas'
+  },
+  projects: {
+    title: 'Projects',
+    description: 'Work & creativity'
+  },
+  media: {
+    title: 'Media',
+    description: 'Books, music, movies, series, anime'
+  },
   history: {
     title: 'History',
     description: 'Posts about historical events'
@@ -141,7 +162,7 @@ Open `src/pages/collections/[collection]/[...slug].astro` and update:
 
 ```typescript
 export async function getStaticPaths() {
-  const collections = ['astronomy', 'geography', 'literature', 'history'] as const
+  const collections = ['gallery', 'thoughts', 'projects', 'media', 'history'] as const
   // ...
 }
 ```
@@ -150,7 +171,7 @@ Also update the type:
 
 ```typescript
 type Props = {
-  post: CollectionEntry<'astronomy'> | CollectionEntry<'geography'> | CollectionEntry<'literature'> | CollectionEntry<'history'>
+  post: CollectionEntry<'gallery'> | CollectionEntry<'thoughts'> | CollectionEntry<'projects'> | CollectionEntry<'media'> | CollectionEntry<'history'>
   collection: string
 }
 ```

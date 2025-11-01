@@ -15,23 +15,23 @@ const posts = defineCollection({
   schema: () => postSchema
 })
 
-const astronomy = defineCollection({
-  loader: glob({ base: './src/content/astronomy', pattern: '**/*.{md,mdx}' }),
+const gallery = defineCollection({
+  loader: glob({ base: './src/content/gallery', pattern: '**/*.{md,mdx}' }),
   schema: () => postSchema
 })
 
-const geography = defineCollection({
-  loader: glob({ base: './src/content/geography', pattern: '**/*.{md,mdx}' }),
+const thoughts = defineCollection({
+  loader: glob({ base: './src/content/thoughts', pattern: '**/*.{md,mdx}' }),
   schema: () => postSchema
 })
 
-const literature = defineCollection({
-  loader: glob({ base: './src/content/literature', pattern: '**/*.{md,mdx}' }),
+const projects = defineCollection({
+  loader: glob({ base: './src/content/projects', pattern: '**/*.{md,mdx}' }),
   schema: () => postSchema
 })
 
-const movie = defineCollection({
-  loader: glob({ base: './src/content/movie', pattern: '**/*.{md,mdx}' }),
+const media = defineCollection({
+  loader: glob({ base: './src/content/media', pattern: '**/*.{md,mdx}' }),
   schema: () => postSchema
 })
 
@@ -42,4 +42,4 @@ const about = defineCollection({
   schema: z.object({})
 })
 
-export const collections = { posts, astronomy, geography, literature, movie, about }
+export const collections = { posts, gallery, thoughts, projects, media, about }

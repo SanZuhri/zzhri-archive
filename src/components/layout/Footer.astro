@@ -1,6 +1,5 @@
 ---
 import { themeConfig } from '@/config'
-const today = new Date()
 ---
 
 <footer>
@@ -8,9 +7,9 @@ const today = new Date()
     <div class="copyright">
       <span class="date">
         &copy;
-        {today.getFullYear()}
+        2024
       </span>
-      {themeConfig.site.author}
+      <a href="/about/">{themeConfig.site.author}</a>
     </div>
     <div class="powered-by">
       Powered by{' '}

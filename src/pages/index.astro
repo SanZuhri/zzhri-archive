@@ -1,35 +1,35 @@
 ---
 import IndexLayout from '@/layouts/IndexLayout.astro'
-import RandomPost from '@/components/widgets/RandomPost.astro'
 import { themeConfig } from '@/config'
 ---
 
 <IndexLayout title={themeConfig.site.title} description={themeConfig.site.description}>
   <main>
-    <div class="intro">
-      <h1>Welcome to {themeConfig.site.title}</h1>
+<div class="intro">
+      <h1>Hi, I'm {themeConfig.site.author}. Welcome to my archive.</h1>
       
       <div class="about-section">
         <p class="description">
-          <strong>Archive</strong> is a minimal collection and archive system built with Astro and the Chiri theme. 
-          It helps you organize your content into themed collections with a clean, distraction-free interface.
+          This is my personal digital archive where I collect and organize thoughts, ideas, and knowledge
+          across various topics that interest me. From photos and visuals to reflections and creative projects -
+          this space holds my journey of learning and discovery.
         </p>
         
         <p class="description">
-          Whether you're building a knowledge base, documentation site, or personal archive, 
-          this system provides an elegant way to organize and browse your content.
+          I built this archive as a way to document my interests and share what I've learned along the way. 
+          Feel free to explore the collections and dive into whatever catches your curiosity.
         </p>
       </div>
 
       <div class="highlight-box">
-        <p class="highlight-title">📚 New here?</p>
+        <p class="highlight-title">🚀 Where to start?</p>
         <p class="highlight-text">
-          Start by reading the <a href="/guide/" class="inline-link">Guide posts</a> to learn how to use Archive, 
-          add collections, and create posts. The guides will help you get the most out of your archive.
+          Browse through my <a href="/collections/" class="inline-link">collections</a> to discover different topics, 
+          or check out some <a href="/guide/" class="inline-link">guides</a> if you're interested in building your own archive.
         </p>
       </div>
       
-      <div class="links">
+<div class="links">
         <a href="/collections/" class="link-item">
           <span class="link-title">Collections</span>
           <span class="link-desc">Browse organized collections of posts</span>
@@ -41,8 +41,6 @@ import { themeConfig } from '@/config'
         </a>
        </div>
      </div>
-
-     <RandomPost />
    </main>
 </IndexLayout>
 

@@ -3,7 +3,7 @@ import { getCollection } from 'astro:content'
 import FormattedDate from '@/components/widgets/FormattedDate.astro'
 
 // Get all posts from all collections
-const collections = ['posts', 'astronomy', 'geography', 'literature', 'movie'] as const
+const collections = ['posts', 'gallery', 'thoughts', 'projects', 'media'] as const
 const allPosts = await Promise.all(
   collections.map(async (collection) => {
     const posts = await getCollection(collection)

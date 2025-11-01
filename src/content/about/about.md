@@ -1,28 +1,23 @@
 ---
-title: 'About'
+title: 'About Me'
 ---
 
-**Archive** is a minimal collection and archive system built with [Astro](https://astro.build) and the [Chiri theme](https://github.com/the3ash/astro-chiri).
+# Hi, I'm Zzhri 👋
 
-This system helps you organize content into themed collections with a clean, distraction-free interface. Perfect for building knowledge bases, documentation sites, or personal archives.
+Welcome to my corner of the internet! I'm someone who loves learning, exploring, and documenting the journey along the way.
 
-## Getting Started
+## What I Do
 
-New to Archive? Start with these essential guides:
+I'm passionate about collecting knowledge and organizing it in ways that make sense to me. This archive is my digital garden - a place where I cultivate ideas, document discoveries, and share what I'm learning about the world.
 
-- **[Welcome to Archive](/welcome/)** - Learn what Archive is and its key features
-- **[How to Add a Post](/how-to-add-post/)** - Step-by-step guide with workflow diagram
-- **[How to Add a New Collection](/how-to-add-collection/)** - Create custom collections with visual flow
-- **[Markdown vs MDX](/markdown-vs-mdx/)** - Understand the differences and when to use each
-- **[Using MDX](/using-mdx/)** - Interactive examples and practical guide
-- **[Customizing Your Archive](/customizing-archive/)** - Personalize your archive
+Photography captures creative moments, while thoughtful reflections shape my perspective. I enjoy creative projects that bring ideas to life, and find inspiration in books, music, movies, series, and anime. Technology fascinates me as I build tools and systems to organize information better.
 
-## Features
+This space is more than just a collection of notes - it's my attempt to make sense of the world, one topic at a time. I believe in the power of organized knowledge and the beauty of connecting seemingly unrelated ideas.
 
-- **Collections System** - Organize posts into themed collections
-- **Minimal Design** - Clean, typography-first interface based on Chiri
-- **Sidebar Navigation** - Quick access to Home, Collections, and Guide
-- **Responsive Layout** - Works beautifully on all screen sizes
-- **Markdown Support** - Write content in Markdown with full formatting support
+## Let's Connect
 
-Browse [Collections](/collections/) to see organized content, or continue reading the guides below to learn more.
+I'm always open to interesting conversations and new perspectives. Feel free to explore my collections, and if something resonates with you, I'd love to hear about it.
+
+---
+
+*This archive is built with [Astro](https://astro.build) and the [Chiri theme](https://github.com/the3ash/astro-chiri) - because even the tools we use should be thoughtful and well-designed.*
